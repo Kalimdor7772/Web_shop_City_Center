@@ -1,0 +1,9 @@
+PrismaClientConstructorValidationError: Unknown property 0 provided to PrismaClient constructor.
+Read more at https://pris.ly/d/client-constructor
+    at al (D:\Agent antigravity\backend\node_modules\@prisma\client\runtime\client.js:66:3832)
+    at new t (D:\Agent antigravity\backend\node_modules\@prisma\client\runtime\client.js:70:1241)
+    at debug (file:///D:/Agent%20antigravity/backend/debug_prisma.js:8:24)
+    at file:///D:/Agent%20antigravity/backend/debug_prisma.js:20:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:413:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)

@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: city_center_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-city_center}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - city_center_network
+  # Backend service will be added later once Dockerfile is created
+  # backend:
+  #   build: ./backend
+  #   ports:
+  #     - "5000:5000"
+  #   env_file: .env
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - city_center_network
+
+  # Frontend serviec will be added later
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - city_center_network
+
+volumes:
+  postgres_data:
+
+
+networks:
+  city_center_network:
+    driver: bridge
