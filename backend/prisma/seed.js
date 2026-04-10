@@ -5,26 +5,30 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 const categoriesData = [
-    {
-        name: "Фрукты",
-        image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&q=80&w=1000"
-    },
-    {
-        name: "Овощи",
-        image: "https://images.unsplash.com/photo-1597362868123-a55d39003f86?auto=format&fit=crop&q=80&w=1000"
-    },
-    {
-        name: "Молочные продукты",
-        image: "https://images.unsplash.com/photo-1628088062854-d1870b4553da?auto=format&fit=crop&q=80&w=1000"
-    },
-    {
-        name: "Хлеб и выпечка",
-        image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=1000"
-    },
-    {
-        name: "Мясо и рыба",
-        image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&q=80&w=1000"
-    }
+    // Родительские категории
+    { name: "Продукты питания", image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=1000", parentId: null },
+    { name: "Напитки", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&q=80&w=1000", parentId: null },
+    { name: "Кондитерские изделия", image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&q=80&w=1000", parentId: null },
+    { name: "Бакалея", image: "https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&q=80&w=1000", parentId: null },
+    // Подкатегории для Продукты питания
+    { name: "Фрукты", image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?auto=format&fit=crop&q=80&w=1000", parentName: "Продукты питания" },
+    { name: "Овощи", image: "https://images.unsplash.com/photo-1597362868123-a55d39003f86?auto=format&fit=crop&q=80&w=1000", parentName: "Продукты питания" },
+    { name: "Молочные продукты", image: "https://images.unsplash.com/photo-1628088062854-d1870b4553da?auto=format&fit=crop&q=80&w=1000", parentName: "Продукты питания" },
+    { name: "Хлеб и выпечка", image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=1000", parentName: "Продукты питания" },
+    { name: "Мясо и рыба", image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&q=80&w=1000", parentName: "Продукты питания" },
+    // Подкатегории для Напитков
+    { name: "Минеральная вода", image: null, parentName: "Напитки" },
+    { name: "Соки и нектары", image: null, parentName: "Напитки" },
+    { name: "Чай и кофе", image: null, parentName: "Напитки" },
+    { name: "Газировка", image: null, parentName: "Напитки" },
+    // Подкатегории для Кондитерских изделий
+    { name: "Шоколад", image: null, parentName: "Кондитерские изделия" },
+    { name: "Печенье", image: null, parentName: "Кондитерские изделия" },
+    { name: "Конфеты", image: null, parentName: "Кондитерские изделия" },
+    // Подкатегории для Бакалеи
+    { name: "Макароны", image: null, parentName: "Бакалея" },
+    { name: "Крупы", image: null, parentName: "Бакалея" },
+    { name: "Консервы", image: null, parentName: "Бакалея" },
 ];
 
 const manufacturersData = [
@@ -36,12 +40,23 @@ const manufacturersData = [
     { name: "Зенченко", country: "Kazakhstan" },
     { name: "Кублей", country: "Kazakhstan" },
     { name: "Алель Агро", country: "Kazakhstan" },
+    { name: "Rich", country: "Kazakhstan" },
     { name: "Простоквашино", country: "Russia" },
     { name: "Домик в деревне", country: "Russia" },
     { name: "Макфа", country: "Russia" },
     { name: "Мираторг", country: "Russia" },
+    { name: "Baltika", country: "Russia" },
     { name: "Danone", country: "France" },
     { name: "Hochland", country: "Germany" },
+    { name: "Jacobs", country: "Germany" },
+    { name: "Lipton", country: "United Kingdom" },
+    { name: "Borjomi", country: "Georgia" },
+    { name: "Aqua Minerale", country: "Kazakhstan" },
+    { name: "PepsiCo", country: "USA" },
+    { name: "Coca-Cola", country: "USA" },
+    { name: "Alpen Gold", country: "Russia" },
+    { name: "Юбилейное", country: "Russia" },
+    { name: "Рафаэлло", country: "Germany" },
     { name: "Local Farmer", country: "Kazakhstan" }
 ];
 
@@ -76,7 +91,19 @@ const nutritionProfiles = [
     { terms: ["пельмени", "манты", "котлет"], values: { calories: 255, protein: 11, fat: 12, carbs: 24, servingGrams: 700, nutritionBasis: "1 упаковка" } },
     { terms: ["тушенка", "тушеная", "икра"], values: { calories: 240, protein: 15, fat: 18, carbs: 3, servingGrams: 325, nutritionBasis: "1 банка" } },
     { terms: ["форель", "семга", "рыба", "минтай", "хек", "сельд"], values: { calories: 185, protein: 20, fat: 11, carbs: 0, servingGrams: 500, nutritionBasis: "1 упаковка" } },
-    { terms: ["кревет"], values: { calories: 99, protein: 24, fat: 0.3, carbs: 0.2, servingGrams: 500, nutritionBasis: "1 упаковка" } }
+    { terms: ["кревет"], values: { calories: 99, protein: 24, fat: 0.3, carbs: 0.2, servingGrams: 500, nutritionBasis: "1 упаковка" } },
+    { terms: ["вода", "боржоми", "аqua"], values: { calories: 0, protein: 0, fat: 0, carbs: 0, servingGrams: 500, nutritionBasis: "1 бутылка" } },
+    { terms: ["сок", "нектар"], values: { calories: 45, protein: 0.5, fat: 0.1, carbs: 11, servingGrams: 1000, nutritionBasis: "1 л" } },
+    { terms: ["чай"], values: { calories: 1, protein: 0.1, fat: 0, carbs: 0.3, servingGrams: 200, nutritionBasis: "1 пакетик" } },
+    { terms: ["кофе"], values: { calories: 2, protein: 0.2, fat: 0.1, carbs: 0.3, servingGrams: 10, nutritionBasis: "1 ч.л." } },
+    { terms: ["газировка", "кола", "пепси"], values: { calories: 42, protein: 0, fat: 0, carbs: 10.6, servingGrams: 330, nutritionBasis: "1 банка" } },
+    { terms: ["пиво"], values: { calories: 43, protein: 0.5, fat: 0, carbs: 3.6, servingGrams: 500, nutritionBasis: "1 бутылка" } },
+    { terms: ["шоколад"], values: { calories: 535, protein: 6, fat: 31, carbs: 55, servingGrams: 85, nutritionBasis: "1 плитка" } },
+    { terms: ["печенье"], values: { calories: 450, protein: 6.5, fat: 15, carbs: 72, servingGrams: 180, nutritionBasis: "1 упаковка" } },
+    { terms: ["конфеты", "рафаэлло"], values: { calories: 410, protein: 4, fat: 12, carbs: 72, servingGrams: 180, nutritionBasis: "1 упаковка" } },
+    { terms: ["макароны", "спагетти", "лапша"], values: { calories: 340, protein: 11, fat: 1.3, carbs: 72, servingGrams: 450, nutritionBasis: "1 упаковка" } },
+    { terms: ["крупа", "рис", "гречка"], values: { calories: 330, protein: 7, fat: 1, carbs: 69, servingGrams: 1000, nutritionBasis: "1 упаковка" } },
+    { terms: ["консервы"], values: { calories: 120, protein: 5, fat: 8, carbs: 8, servingGrams: 300, nutritionBasis: "1 банка" } }
 ];
 
 const categoryNutritionFallback = {
@@ -84,7 +111,17 @@ const categoryNutritionFallback = {
     "Овощи": { calories: 32, protein: 1.4, fat: 0.3, carbs: 6, servingGrams: 1000, nutritionBasis: "1 кг" },
     "Молочные продукты": { calories: 72, protein: 3.9, fat: 3.8, carbs: 4.7, servingGrams: 900, nutritionBasis: "1 упаковка" },
     "Хлеб и выпечка": { calories: 265, protein: 7.3, fat: 3.2, carbs: 52, servingGrams: 400, nutritionBasis: "1 упаковка" },
-    "Мясо и рыба": { calories: 185, protein: 18, fat: 12, carbs: 0, servingGrams: 700, nutritionBasis: "1 упаковка" }
+    "Мясо и рыба": { calories: 185, protein: 18, fat: 12, carbs: 0, servingGrams: 700, nutritionBasis: "1 упаковка" },
+    "Минеральная вода": { calories: 0, protein: 0, fat: 0, carbs: 0, servingGrams: 500, nutritionBasis: "1 бутылка" },
+    "Соки и нектары": { calories: 45, protein: 0.5, fat: 0.1, carbs: 11, servingGrams: 1000, nutritionBasis: "1 л" },
+    "Чай и кофе": { calories: 2, protein: 0.2, fat: 0.1, carbs: 0.3, servingGrams: 10, nutritionBasis: "1 ч.л." },
+    "Газировка": { calories: 42, protein: 0, fat: 0, carbs: 10.6, servingGrams: 330, nutritionBasis: "1 банка" },
+    "Шоколад": { calories: 535, protein: 6, fat: 31, carbs: 55, servingGrams: 85, nutritionBasis: "1 плитка" },
+    "Печенье": { calories: 450, protein: 6.5, fat: 15, carbs: 72, servingGrams: 180, nutritionBasis: "1 упаковка" },
+    "Конфеты": { calories: 410, protein: 4, fat: 12, carbs: 72, servingGrams: 180, nutritionBasis: "1 упаковка" },
+    "Макароны": { calories: 340, protein: 11, fat: 1.3, carbs: 72, servingGrams: 450, nutritionBasis: "1 упаковка" },
+    "Крупы": { calories: 330, protein: 7, fat: 1, carbs: 69, servingGrams: 1000, nutritionBasis: "1 упаковка" },
+    "Консервы": { calories: 120, protein: 5, fat: 8, carbs: 8, servingGrams: 300, nutritionBasis: "1 банка" }
 };
 
 function inferNutrition(product) {
@@ -111,7 +148,7 @@ const productsData = [
         description: "Легендарный алматинский сорт яблок с плотной сладкой мякотью.",
         price: 690,
         stock: 90,
-        images: ["https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Фрукты",
         manufacturerName: "Local Farmer"
     },
@@ -120,7 +157,7 @@ const productsData = [
         description: "Спелые бананы для завтраков, смузи и детских перекусов.",
         price: 799,
         stock: 150,
-        images: ["https://images.unsplash.com/photo-1603833665858-e61d17a86224?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1603833665858-e61d17a86224?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Фрукты",
         manufacturerName: "Local Farmer"
     },
@@ -130,7 +167,7 @@ const productsData = [
         description: "Сочные апельсины с ярким вкусом и тонкой кожурой.",
         price: 949,
         stock: 80,
-        images: ["https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1547514701-42782101795e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Фрукты",
         manufacturerName: "Local Farmer"
     },
@@ -139,7 +176,7 @@ const productsData = [
         description: "Сладкая десертная груша, подходящая для свежей подачи.",
         price: 1190,
         stock: 60,
-        images: ["https://images.unsplash.com/photo-1514756331096-242f3100f167?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1514756331096-242f3100f167?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Фрукты",
         manufacturerName: "Local Farmer"
     },
@@ -148,7 +185,7 @@ const productsData = [
         description: "Кисло-ароматные лимоны для чая, десертов и маринадов.",
         price: 890,
         stock: 70,
-        images: ["https://images.unsplash.com/photo-1568569350062-ebbf3ad17500?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1568569350062-ebbf3ad17500?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Фрукты",
         manufacturerName: "Local Farmer"
     },
@@ -157,7 +194,7 @@ const productsData = [
         description: "Сладкие мандарины без косточек для зимнего стола.",
         price: 1290,
         stock: 110,
-        images: ["https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Фрукты",
         manufacturerName: "Local Farmer"
     },
@@ -166,7 +203,7 @@ const productsData = [
         description: "Казахстанский картофель для запекания, супов и гарниров.",
         price: 229,
         stock: 450,
-        images: ["https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Овощи",
         manufacturerName: "Local Farmer"
     },
@@ -175,7 +212,7 @@ const productsData = [
         description: "Мясистые томаты с насыщенным сладковатым вкусом.",
         price: 1150,
         stock: 95,
-        images: ["https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1592924357228-91a4daadcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Овощи",
         manufacturerName: "Local Farmer"
     },
@@ -184,7 +221,7 @@ const productsData = [
         description: "Хрустящие длинноплодные огурцы для салатов и закусок.",
         price: 920,
         stock: 85,
-        images: ["https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Овощи",
         manufacturerName: "Local Farmer"
     },
@@ -193,7 +230,7 @@ const productsData = [
         description: "Отборный лук для горячих блюд, супов и зажарки.",
         price: 199,
         stock: 400,
-        images: ["https://images.unsplash.com/photo-1508747703725-719777637510?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1508747703725-719777637510?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Овощи",
         manufacturerName: "Local Farmer"
     },
@@ -202,7 +239,7 @@ const productsData = [
         description: "Сладкая морковь с ровным калибром и чистой кожицей.",
         price: 329,
         stock: 320,
-        images: ["https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Овощи",
         manufacturerName: "Local Farmer"
     },
@@ -220,7 +257,7 @@ const productsData = [
         description: "Пастеризованное молоко для каш, кофе и ежедневного потребления.",
         price: 610,
         stock: 180,
-        images: ["https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Молочные продукты",
         manufacturerName: "Адал"
     },
@@ -229,7 +266,7 @@ const productsData = [
         description: "Классический кефир с мягкой кисломолочной закваской.",
         price: 525,
         stock: 160,
-        images: ["https://images.unsplash.com/photo-1628088062854-d1870b4553da?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Молочные продукты",
         manufacturerName: "FoodMaster"
     },
@@ -238,7 +275,7 @@ const productsData = [
         description: "Густой йогурт без лишней сладости для завтраков и десертов.",
         price: 799,
         stock: 90,
-        images: ["https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Молочные продукты",
         manufacturerName: "FoodMaster"
     },
@@ -247,7 +284,7 @@ const productsData = [
         description: "Ультрапастеризованное молоко для домашнего запаса.",
         price: 565,
         stock: 140,
-        images: ["https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Молочные продукты",
         manufacturerName: "Айналайын"
     },
@@ -304,7 +341,7 @@ const productsData = [
         description: "Мягкий пшеничный хлеб на каждый день.",
         price: 210,
         stock: 190,
-        images: ["https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Хлеб и выпечка",
         manufacturerName: "Local Farmer"
     },
@@ -313,7 +350,7 @@ const productsData = [
         description: "Хрустящий багет для сэндвичей, закусок и сервировки.",
         price: 390,
         stock: 80,
-        images: ["https://images.unsplash.com/photo-1549931319-a545dcf3bc73?auto=format&fit=crop&q=80&w=1200"],
+        images: ["https://images.unsplash.com/photo-1549931319-a545dcf61199?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"],
         categoryName: "Хлеб и выпечка",
         manufacturerName: "Local Farmer"
     },
@@ -441,12 +478,50 @@ productsData.push(
         { name: "Грейпфрут", description: "Освежающий цитрус с легкой благородной горчинкой.", price: 1150, stock: 40, images: ["https://images.unsplash.com/photo-1577234286642-fc512a5f8f11?auto=format&fit=crop&q=80&w=1200"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
         { name: "Помело", description: "Крупный цитрус с нежной мякотью и мягким вкусом.", price: 1490, stock: 35, images: ["https://images.unsplash.com/photo-1587049633312-d628ae50a8ae?auto=format&fit=crop&q=80&w=1200"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
         { name: "Черешня", description: "Сладкая черешня для сезонного летнего предложения.", price: 2890, stock: 25, images: ["https://images.unsplash.com/photo-1528821154947-1aa3d1b74941?auto=format&fit=crop&q=80&w=1200"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
-        { name: "Вишня", description: "Кисло-сладкая вишня для выпечки и десертов.", price: 2390, stock: 25, images: ["https://images.unsplash.com/photo-1528821154947-1aa3d1b74941?auto=format&fit=crop&q=80&w=1200"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
-        { name: "Клубника", description: "Ароматная клубника для десертов и завтраков.", price: 2490, stock: 30, images: ["https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&q=80&w=1200"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
-        { name: "Малина", description: "Нежная ягода для каш, десертов и напитков.", price: 2690, stock: 20, images: ["https://images.unsplash.com/photo-1577003833619-76bbd7f82948?auto=format&fit=crop&q=80&w=1200"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
-        { name: "Голубика", description: "Популярная ягода для полезных перекусов и боулов.", price: 3290, stock: 18, images: ["https://images.unsplash.com/photo-1498557850523-fd3d118b962e?auto=format&fit=crop&q=80&w=1200"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
-        { name: "Арбуз", description: "Сладкий арбуз для летнего ассортимента и семейных ужинов.", price: 390, stock: 80, images: ["https://images.unsplash.com/photo-1563114773-84221bd62daa?auto=format&fit=crop&q=80&w=1200"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
-        { name: "Дыня", description: "Сочная дыня с медовым ароматом.", price: 590, stock: 50, images: ["https://images.unsplash.com/photo-1571575173700-afb9492e6a50?auto=format&fit=crop&q=80&w=1200"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
+        // Напитки
+        { name: "Borjomi минеральная вода", description: "Лечебная минеральная вода из Грузии.", price: 450, stock: 200, images: ["https://images.unsplash.com/photo-1559839914-17aae19cec41?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Минеральная вода", manufacturerName: "Borjomi" },
+        { name: "Aqua Minerale газированная", description: "Казахстанская минеральная вода с газом.", price: 180, stock: 300, images: ["https://images.unsplash.com/photo-1559839914-17aae19cec41?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Минеральная вода", manufacturerName: "Aqua Minerale" },
+        { name: "Rich яблочный сок", description: "Натуральный яблочный сок без сахара.", price: 650, stock: 150, images: ["https://images.unsplash.com/photo-1571771019784-3ff35f4f4277?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Соки и нектары", manufacturerName: "Rich" },
+        { name: "Rich апельсиновый нектар", description: "Освежающий апельсиновый нектар.", price: 620, stock: 140, images: ["https://images.unsplash.com/photo-1571771019784-3ff35f4f4277?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Соки и нектары", manufacturerName: "Rich" },
+        { name: "Lipton черный чай", description: "Классический черный чай в пакетиках.", price: 890, stock: 100, images: ["https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Чай и кофе", manufacturerName: "Lipton" },
+        { name: "Jacobs кофе молотый", description: "Ароматный молотый кофе для кофемашин.", price: 2490, stock: 80, images: ["https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Чай и кофе", manufacturerName: "Jacobs" },
+        { name: "Coca-Cola", description: "Классическая газировка.", price: 350, stock: 250, images: ["https://images.unsplash.com/photo-1554866585-cd94860890b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Газировка", manufacturerName: "Coca-Cola" },
+        { name: "Pepsi-Cola", description: "Освежающая газировка.", price: 340, stock: 240, images: ["https://images.unsplash.com/photo-1554866585-cd94860890b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Газировка", manufacturerName: "PepsiCo" },
+        { name: "Baltika 7 пиво светлое", description: "Легкое светлое пиво.", price: 290, stock: 180, images: ["https://images.unsplash.com/photo-1608270586620-248524c67de9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Газировка", manufacturerName: "Baltika" },
+        // Хлеб и выпечка
+        { name: "Батон нарезной", description: "Свежий белый батон для бутербродов.", price: 250, stock: 120, images: ["https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Хлеб и выпечка", manufacturerName: "Зенченко" },
+        { name: "Лаваш тонкий", description: "Традиционный казахский лаваш.", price: 180, stock: 200, images: ["https://images.unsplash.com/photo-1551218808-94e220e084d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Хлеб и выпечка", manufacturerName: "Local Farmer" },
+        { name: "Багет французский", description: "Хрустящий французский багет.", price: 450, stock: 90, images: ["https://images.unsplash.com/photo-1549931319-a545dcf61199?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Хлеб и выпечка", manufacturerName: "Local Farmer" },
+        { name: "Круассан с шоколадом", description: "Слоеный круассан с шоколадной начинкой.", price: 320, stock: 60, images: ["https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Хлеб и выпечка", manufacturerName: "Local Farmer" },
+        // Молочные продукты
+        { name: "Молоко Айналайын 3.2%", description: "Пастеризованное молоко высшего сорта.", price: 580, stock: 150, images: ["https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Молочные продукты", manufacturerName: "Айналайын" },
+        { name: "Кефир Рахат 2.5%", description: "Полезный кефир для ежедневного питания.", price: 450, stock: 130, images: ["https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Молочные продукты", manufacturerName: "Рахат" },
+        { name: "Йогурт Активиа клубника", description: "Йогурт с пробиотиками и вкусом клубники.", price: 290, stock: 100, images: ["https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Молочные продукты", manufacturerName: "Danone" },
+        { name: "Сыр Hochland плавленый", description: "Плавленый сыр для бутербродов.", price: 890, stock: 80, images: ["https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Молочные продукты", manufacturerName: "Hochland" },
+        { name: "Масло сливочное Баян Сулу", description: "Сливочное масло 82% жирности.", price: 1250, stock: 70, images: ["https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Молочные продукты", manufacturerName: "Баян Сулу" },
+        // Мясо и рыба
+        { name: "Курица Кублей филе", description: "Диетическое куриное филе без кожи.", price: 1890, stock: 50, images: ["https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Мясо и рыба", manufacturerName: "Кублей" },
+        { name: "Говядина Мираторг стейк", description: "Мраморная говядина для стейков.", price: 3490, stock: 30, images: ["https://images.unsplash.com/photo-1558030006-450675393462?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Мясо и рыба", manufacturerName: "Мираторг" },
+        { name: "Лосось филе", description: "Свежий лосось для запекания.", price: 4290, stock: 25, images: ["https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Мясо и рыба", manufacturerName: "Local Farmer" },
+        // Кондитерские изделия
+        { name: "Шоколад Alpen Gold молочный", description: "Молочный шоколад с орехами.", price: 650, stock: 120, images: ["https://images.unsplash.com/photo-1606312619070-d48b4c652a52?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Шоколад", manufacturerName: "Alpen Gold" },
+        { name: "Печенье Юбилейное", description: "Классическое песочное печенье.", price: 380, stock: 90, images: ["https://images.unsplash.com/photo-1499636136210-6f4ee915583e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Печенье", manufacturerName: "Юбилейное" },
+        { name: "Конфеты Рафаэлло", description: "Белый шоколад с кокосом.", price: 1250, stock: 60, images: ["https://images.unsplash.com/photo-1549007994-cb92caebd54b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Конфеты", manufacturerName: "Рафаэлло" },
+        // Бакалея
+        { name: "Макароны Макфа спагетти", description: "Длинные спагетти из твердых сортов пшеницы.", price: 450, stock: 100, images: ["https://images.unsplash.com/photo-1621996346565-e3dbc353d2e5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Макароны", manufacturerName: "Макфа" },
+        { name: "Рис круглозерный", description: "Качественный рис для гарниров.", price: 680, stock: 80, images: ["https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Крупы", manufacturerName: "Local Farmer" },
+        { name: "Консервы Домик в деревне тушенка", description: "Говяжья тушенка в банке.", price: 890, stock: 70, images: ["https://images.unsplash.com/photo-1541599468348-e96984315621?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Консервы", manufacturerName: "Домик в деревне" }
+    ]
+);
+
+productsData.push(
+    ...[
+        { name: "Вишня", description: "Кисло-сладкая вишня для выпечки и десертов.", price: 2390, stock: 25, images: ["https://images.unsplash.com/photo-1528821154947-1aa3d1b74941?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
+        { name: "Клубника", description: "Ароматная клубника для десертов и завтраков.", price: 2490, stock: 30, images: ["https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
+        { name: "Малина", description: "Нежная ягода для каш, десертов и напитков.", price: 2690, stock: 20, images: ["https://images.unsplash.com/photo-1577003833619-76bbd7f82948?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
+        { name: "Голубика", description: "Популярная ягода для полезных перекусов и боулов.", price: 3290, stock: 18, images: ["https://images.unsplash.com/photo-1498557850523-fd3d118b962e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
+        { name: "Арбуз", description: "Сладкий арбуз для летнего ассортимента и семейных ужинов.", price: 390, stock: 80, images: ["https://images.unsplash.com/photo-1563114773-84221bd62daa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
+        { name: "Дыня", description: "Сочная дыня с медовым ароматом.", price: 590, stock: 50, images: ["https://images.unsplash.com/photo-1571575173700-afb9492e6a50?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"], categoryName: "Фрукты", manufacturerName: "Local Farmer" },
 
         { name: "Свекла", description: "Свежая свекла для борща, салатов и запекания.", price: 230, stock: 210, images: ["https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&q=80&w=1200"], categoryName: "Овощи", manufacturerName: "Local Farmer" },
         { name: "Кабачки", description: "Молодые кабачки для жарки, тушения и гриля.", price: 690, stock: 90, images: ["https://images.unsplash.com/photo-1583663848850-46af132dc08e?auto=format&fit=crop&q=80&w=1200"], categoryName: "Овощи", manufacturerName: "Local Farmer" },
@@ -641,9 +716,25 @@ async function main() {
     const categoryMap = {};
 
     for (const category of categoriesData) {
-        const savedCategory = await upsertCategory(category);
+        const savedCategory = await upsertCategory({
+            name: category.name,
+            image: category.image,
+            parentId: null // Сначала без parentId
+        });
         categoryMap[category.name] = savedCategory.id;
         console.log(`- Category: ${category.name}`);
+    }
+
+    // Обновить parentId для подкатегорий
+    for (const category of categoriesData) {
+        if (category.parentName) {
+            const parentId = categoryMap[category.parentName];
+            await prisma.category.update({
+                where: { id: categoryMap[category.name] },
+                data: { parentId }
+            });
+            console.log(`- Updated parent for ${category.name}`);
+        }
     }
 
     console.log("Seeding manufacturers...");

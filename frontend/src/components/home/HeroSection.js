@@ -1,109 +1,110 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag, ArrowRight } from "lucide-react";
+import { ArrowRight, Leaf, ShoppingBag, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { t } from "@/lib/i18n";
+import HeroScene from "./HeroScene";
+
+const highlights = [
+    { label: "Fresh Picks", value: "120+" },
+    { label: "Local Farms", value: "18" },
+    { label: "Fast Delivery", value: "15 min" },
+];
 
 const HeroSection = () => {
     return (
-        <section className="relative w-full min-h-[600px] flex items-center justify-center overflow-hidden bg-gray-50 py-12 md:py-20">
-            {/* Background Gradient Blobs */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-green-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-                <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "2s" }}></div>
-                <div className="absolute bottom-[-20%] left-[20%] w-96 h-96 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: "4s" }}></div>
-            </div>
+        <section className="organic-section relative w-full overflow-hidden px-3 py-10 md:px-5 md:py-14">
+            <div className="section-shell relative mx-auto grid min-h-[680px] max-w-7xl grid-cols-1 gap-12 overflow-hidden rounded-[3rem] px-6 py-8 md:grid-cols-[1.08fr_0.92fr] md:px-10 md:py-12">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(247,183,51,0.16),transparent_30%),radial-gradient(circle_at_82%_18%,rgba(31,157,104,0.14),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.4),transparent)]" />
+                <div className="absolute right-[-6%] top-[-6%] h-64 w-64 rounded-full bg-amber-200/30 blur-3xl" />
+                <div className="absolute bottom-[-10%] left-[15%] h-72 w-72 rounded-full bg-emerald-300/20 blur-3xl" />
 
-            <div className="container mx-auto px-4 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                {/* Left Content */}
                 <motion.div
-                    initial={{ opacity: 0, x: -50 }}
+                    initial={{ opacity: 0, x: -40 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="text-left"
+                    transition={{ duration: 0.7, ease: "easeOut" }}
+                    className="relative z-10 flex flex-col justify-center"
                 >
-                    <div className="inline-block px-4 py-2 bg-white rounded-full mb-6 shadow-sm border border-gray-100">
-                        <span className="text-green-600 font-semibold text-sm tracking-wide flex items-center gap-2">
-                            {t.home.deliveryBadge}
-                        </span>
+                    <div className="glass-panel mb-6 inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-emerald-800">
+                        <Leaf className="h-4 w-4" />
+                        {t.home.deliveryBadge}
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-bold font-heading text-gray-900 leading-tight mb-6">
+
+                    <h1 className="max-w-2xl font-heading text-5xl font-black leading-[0.95] tracking-[-0.05em] text-gray-900 md:text-7xl">
                         {t.home.heroTitle}
                     </h1>
-                    <p className="text-lg md:text-xl text-gray-500 mb-8 max-w-lg leading-relaxed font-medium">
+                    <p className="mt-6 max-w-xl text-lg font-medium leading-relaxed text-stone-600 md:text-xl">
                         {t.home.heroSubtitle}
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <Link href="/catalog" className="group flex items-center justify-center gap-3 bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg shadow-green-600/30 transform hover:-translate-y-1">
-                            <ShoppingBag className="w-6 h-6" />
+
+                    <div className="mt-8 flex flex-col gap-4 sm:flex-row">
+                        <Link href="/catalog" className="group inline-flex items-center justify-center gap-3 rounded-[1.5rem] bg-emerald-700 px-8 py-4 text-lg font-bold text-white shadow-[0_18px_34px_rgba(31,157,104,0.28)] hover:-translate-y-1 hover:bg-emerald-800">
+                            <ShoppingBag className="h-6 w-6" />
                             {t.home.shopNow}
                         </Link>
-                        <Link href="/deals" className="group flex items-center justify-center gap-3 bg-white text-gray-900 hover:bg-gray-50 px-8 py-4 rounded-2xl font-bold text-lg transition-all shadow-md  border border-gray-100 transform hover:-translate-y-1">
+                        <Link href="/deals" className="glass-panel group inline-flex items-center justify-center gap-3 rounded-[1.5rem] px-8 py-4 text-lg font-bold text-gray-900 hover:-translate-y-1">
                             {t.home.deals}
-                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                         </Link>
+                    </div>
+
+                    <div className="mt-8 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-3">
+                        {highlights.map((item) => (
+                            <div key={item.label} className="glass-panel rounded-[1.75rem] px-5 py-4">
+                                <p className="text-xs font-bold uppercase tracking-[0.24em] text-stone-500">{item.label}</p>
+                                <p className="mt-2 text-2xl font-black text-gray-900">{item.value}</p>
+                            </div>
+                        ))}
                     </div>
                 </motion.div>
 
-                {/* Right Illustration/Animation */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className="relative h-[400px] md:h-[500px] flex items-center justify-center hidden md:flex"
+                    initial={{ opacity: 0, scale: 0.88, y: 16 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.9, delay: 0.15 }}
+                    className="relative z-10 hidden min-h-[520px] items-center justify-center md:flex"
                 >
-                    {/* Abstract Phone/App visuals using CSS Shapes */}
-                    <div className="relative w-80 h-[520px] bg-white rounded-[3rem] border-[8px] border-gray-900 shadow-2xl overflow-hidden transform rotate-[-6deg] hover:rotate-[0deg] transition-all duration-500">
-                        <div className="absolute top-0 left-0 w-full h-full bg-gray-50 flex flex-col pt-12 px-4 shadow-inner">
-                            {/* Mock UI Header */}
-                            <div className="flex justify-between items-center mb-6 px-2">
-                                <div className="w-8 h-8 rounded-full bg-gray-200"></div>
-                                <div className="w-24 h-4 rounded-full bg-gray-200"></div>
-                                <div className="w-8 h-8 rounded-full bg-gray-200"></div>
+                    <div className="relative h-[560px] w-full max-w-[520px]">
+                        <div className="absolute inset-x-[8%] top-8 h-[420px] rounded-[3rem] bg-[radial-gradient(circle_at_top,#fff8d6,rgba(255,255,255,0.76)_48%,rgba(255,250,244,0.4)_100%)] shadow-[0_40px_100px_rgba(122,92,47,0.18)]" />
+                        <div className="glass-panel-strong absolute left-4 top-0 h-[520px] w-[78%] overflow-hidden rounded-[3rem] border border-white/60">
+                            <HeroScene />
+                            <div className="absolute inset-x-6 top-6 flex items-center justify-between">
+                                <div className="glass-panel rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.26em] text-emerald-800">
+                                    Seasonal
+                                </div>
+                                <div className="glass-panel flex h-11 w-11 items-center justify-center rounded-full text-amber-500">
+                                    <Sparkles className="h-5 w-5" />
+                                </div>
                             </div>
-                            {/* Mock UI Cards */}
-                            <div className="space-y-4">
-                                <motion.div
-                                    animate={{ y: [0, -10, 0] }}
-                                    transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                                    className="h-32 rounded-2xl bg-green-50 border-2 border-green-100 relative flex items-center justify-center font-bold text-green-600"
-                                >
-                                    🍏 Fresh
-                                </motion.div>
-                                <motion.div
-                                    animate={{ y: [0, -8, 0] }}
-                                    transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 }}
-                                    className="h-24 rounded-2xl bg-yellow-50 border-2 border-yellow-100 relative flex items-center justify-center font-bold text-yellow-600"
-                                >
-                                    🍞 Bakery
-                                </motion.div>
-                                <motion.div
-                                    animate={{ y: [0, -12, 0] }}
-                                    transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1 }}
-                                    className="h-24 rounded-2xl bg-gray-100 border-2 border-gray-200 relative flex items-center justify-center font-bold text-gray-400"
-                                >
-                                    🍓 Berries
-                                </motion.div>
+                            <div className="absolute bottom-6 left-6 right-6 rounded-[2rem] bg-white/68 p-5 shadow-[0_20px_50px_rgba(122,92,47,0.18)] backdrop-blur-xl">
+                                <p className="text-xs font-bold uppercase tracking-[0.24em] text-stone-500">Today&apos;s harvest</p>
+                                <p className="mt-2 text-2xl font-black text-gray-900">Organic picks for your basket</p>
+                                <div className="mt-4 flex items-center gap-3">
+                                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">Farm fresh</span>
+                                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">Same day</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Floating "stickers" or badges */}
-                    <motion.div
-                        animate={{ y: [0, -15, 0] }}
-                        transition={{ repeat: Infinity, duration: 3 }}
-                        className="absolute top-20 right-0 lg:-right-8 bg-white p-4 rounded-2xl shadow-xl z-20 transform rotate-12 border border-blue-50"
-                    >
-                        <span className="text-4xl">🥑</span>
-                    </motion.div>
-                    <motion.div
-                        animate={{ y: [0, 15, 0] }}
-                        transition={{ repeat: Infinity, duration: 3.5, delay: 0.5 }}
-                        className="absolute bottom-32 -left-4 lg:-left-12 bg-white p-4 rounded-2xl shadow-xl z-20 transform -rotate-12 border border-green-50"
-                    >
-                        <span className="text-4xl">🍕</span>
-                    </motion.div>
+                        <motion.div
+                            animate={{ y: [0, -12, 0], rotate: [6, 1, 6] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                            className="glass-panel-strong absolute right-0 top-10 rounded-[2rem] px-5 py-4"
+                        >
+                            <div className="text-4xl">{"\uD83C\uDF4A"}</div>
+                            <p className="mt-2 text-sm font-bold text-gray-900">Citrus glow</p>
+                        </motion.div>
+
+                        <motion.div
+                            animate={{ y: [0, 14, 0], rotate: [-8, -2, -8] }}
+                            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+                            className="glass-panel-strong absolute bottom-8 left-0 rounded-[2rem] px-5 py-4"
+                        >
+                            <div className="text-4xl">{"\uD83E\uDD6C"}</div>
+                            <p className="mt-2 text-sm font-bold text-gray-900">Green energy</p>
+                        </motion.div>
+                    </div>
                 </motion.div>
             </div>
         </section>

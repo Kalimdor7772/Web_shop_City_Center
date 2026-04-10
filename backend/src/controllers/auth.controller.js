@@ -80,7 +80,7 @@ export const login = async (req, res, next) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            const error = new Error('Please provide email and password');
+            const error = new Error('Пожалуйста, введите email и пароль');
             error.statusCode = 400;
             throw error;
         }
@@ -98,7 +98,7 @@ export const login = async (req, res, next) => {
                 },
             });
         } else {
-            const error = new Error('Invalid credentials');
+            const error = new Error('Пароль или логин не совпадают. Повторите попытку.');
             error.statusCode = 401;
             throw error;
         }

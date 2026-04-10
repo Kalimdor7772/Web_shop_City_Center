@@ -1,0 +1,301 @@
+export const kk = {
+    common: {
+        addToCart: "Сәлгіге салу",
+        buyNow: "Қазір сатып алу",
+        checkout: "Төлемге өтү",
+        cancel: "Бас тарту",
+        confirm: "Растау",
+        save: "Сақтау",
+        delete: "Жою",
+        edit: "Өзгерту",
+        back: "Артқа",
+        loading: "Жүктелуде...",
+        error: "Қате",
+        success: "Сәтті",
+        search: "Іздеу...",
+        price: "Баға",
+        quantity: "Саны",
+        total: "Барлығы",
+        showMore: "Тағы көрсету",
+        currency: "₸"
+    },
+    nav: {
+        home: "Басты бет",
+        catalog: "Каталог",
+        cart: "Сәлгі",
+        profile: "Профиль",
+        admin: "Әкімші",
+        login: "Кіру",
+        logout: "Шығу",
+        searchPlaceholder: "Өнімдерді іздеу...",
+        deals: "Акциялар",
+        ai: "AI Көмекшісі",
+        guest: "Қонақ"
+    },
+    footer: {
+        brandDesc: "Жаңа буын супермаркетінде таза өнімдер, ыңғайлы таңдау және жылдам жеткізу.",
+        nav: "Навигация",
+        contacts: "Байланыс",
+        payment: "Төлем",
+        paymentDesc: "Қауіпсіз төлемдер SSL шифрлаумен қорғалған.",
+        rights: "City Center. Барлық құқықтар қорғалған.",
+        privacy: "Құпиялылық саясаты",
+        terms: "Пайдалану шарттары"
+    },
+    auth: {
+        loginTitle: "Кіру",
+        registerTitle: "Тіркелу",
+        welcome: "Қайырлы күн",
+        signUp: "Тіркелу",
+        experienceFuture: "Сауда болашағы осында",
+        startJourney: "Премиум сауда саяхатын бастаңыз",
+        phoneOrEmail: "Телефон немесе Email",
+        phoneLabel: "Телефон нөмірі",
+        passwordLabel: "Құпия сөз",
+        createPassword: "Құпия сөз ойлап табыңыз",
+        confirmPassword: "Құпия сөзді растаңыз",
+        firstNameLabel: "Аты",
+        lastNameLabel: "Тегі",
+        submit: "Кіру",
+        registerSubmit: "Тіркелу",
+        noAccount: "Аккаунтыңыз жоқ па?",
+        createAccount: "Тіркелу",
+        haveAccount: "Аккаунтыңыз бар ма?",
+        signIn: "Кіру",
+        logoutConfirm: "Шығуға сенімдісіз бе?",
+        back: "Артқа",
+        terms: "Жалғастыра отырып, сіз біздің шарттарымызға келісесіз",
+        termsLink: "Қызмет көрсету шарттары",
+        errors: {
+            required: "Міндетті",
+            phoneRequired: "Телефон қажет",
+            passwordRequired: "Құпия сөз қажет",
+            minChar: "Кемінде 6 таңба",
+            mismatch: "Құпия сөздер сәйкес келмейді"
+        }
+    },
+    home: {
+        heroTitle: "Өнімдер жеткізіледі",
+        heroSubtitle: "Салқын және дайын ас, үй тауарлары сіздің есігіңізге дейін.",
+        deliveryBadge: "⚡ 15 минутта жеткізу",
+        shopNow: "Каталогқа өту",
+        deals: "Акциялар",
+        categoriesTitle: "Санаттар",
+        categoriesSubtitle: "Әр жеткізілімде жаңа піскендік",
+        popularTitle: "Танымал",
+        popularSubtitle: "Көбіне бірге сатып алынады",
+        ctaTitle: "Салқындатқышыңызды толтыруға дайынсыз ба?",
+        ctaSubtitle: "Алғашқы жеткізу тегін! Қызметті дәл қазір сынап көріңіз.",
+        ctaButton: "Каталогқа өту",
+        trust: {
+            delivery15: "15 минуттық жеткізу",
+            delivery15Desc: "Біз аштыққа үлгермей жетеміз.",
+            freeDelivery: "Тегін жеткізу",
+            freeDeliveryDesc: "5000 ₸ бастап тапсырыстарға тегін жеткізу.",
+            quality: "Сапа кепілдігі",
+            qualityDesc: "Көңіліңіз толмаса, ақшаңызды қайтарамыз.",
+            care: "Әр тапсырысқа қамқорлық",
+            careDesc: "Әр тапсырыс мұқият дайындалады."
+        },
+        cat: {
+            produce: "Жемістер мен көкөністер",
+            bakery: "Наубайхана",
+            dairy: "Сүт өнімдері",
+            meat: "Ет",
+            seafood: "Балық және теңіз өнімдері",
+            grocery: "Үй тауарлары",
+            coffee: "Кофе",
+            sweets: "Тәттілер"
+        }
+    },
+    cart: {
+        title: "Сәлгі",
+        emptyTitle: "Сәлгі бос",
+        emptyDesc: "Тапсырыс жасау үшін каталогтан өнімдер қосыңыз.",
+        goToCatalog: "Каталогқа өту",
+        clearCart: "Сәлгіні тазалау",
+        clearConfirm: "Сәлгіні тазартқаныңызға сенімдісіз бе?",
+        itemsCount: "Сәлгідегі заттар:",
+        summary: "Тапсырыс ақпараты",
+        items: "Заттар",
+        discount: "Жеңілдік",
+        delivery: "Жеткізу",
+        free: "Тегін",
+        total: "Барлығы",
+        checkout: "Төлемге өту",
+        secure: "Қауіпсіз төлем кепілдігі"
+    },
+    checkout: {
+        title: "Төлем",
+        subtitle: "Есігіңізге дейін жеткізу",
+        addressTitle: "Жеткізу мекенжайы",
+        entrance: "Қабылдама",
+        floor: "Қабат",
+        comment: "Пікір",
+        commentPlaceholder: "Домофон коды, есікке қалдырыңыз...",
+        saveAddress: "Бұл мекенжайды профильге сақтау",
+        paymentMethod: "Төлем әдісі",
+        recommended: "Ұсынылады",
+        fastQr: "Жылдам QR төлем",
+        onDelivery: "Жеткізу кезінде",
+        cash: "Қолма-қол",
+        payCourier: "Курьерге төлеу",
+        summaryTitle: "Жиынтық",
+        toPay: "Төлеу",
+        confirm: "Растау",
+        processing: "Өңделуде...",
+        ssl: "256-bit SSL қауіпсіз төлем",
+        support: "24/7 қолдау",
+        freeCall: "ҚЗ ішінде тегін"
+    },
+    forms: {
+        street: "Көше",
+        house: "Үй",
+        apt: "Пәтер/Офис",
+        entrance: "Қабылдама",
+        floor: "Қабат",
+        comment: "Пікір",
+        commentPlaceholder: "Домофон коды, есікке қалдырыңыз...",
+        city: "Қала",
+        selectCity: "Қаланы таңдаңыз",
+        phone: "Телефон"
+    },
+    profile: {
+        title: "Профиль",
+        personalInfo: "Жеке мәліметтер",
+        myOrders: "Тапсырыстарым",
+        addresses: "Мекенжайлар",
+        logout: "Шығу",
+        logoutConfirm: "Шығуға сенімдісіз бе?",
+        edit: "Өзгерту",
+        change: "Өзгерту",
+        save: "Сақтау",
+        saving: "Сақталуда...",
+        cancel: "Бас тарту",
+        firstName: "Есімі",
+        lastName: "Тегі",
+        phone: "Телефон",
+        email: "Email",
+        regDate: "Тіркелу күні",
+        status: "Аккаунт статусы",
+        premium: "Premium клиент",
+        totalOrders: "Жалпы тапсырыстар",
+        favorites: "Таңдаулы",
+        bonuses: "Бонустар",
+        addAddress: "Мекенжай қосу",
+        primaryAddress: "Негізгі мекенжай",
+        editProfile: "Профильді өзгерту",
+        updateData: "Жеке деректерді жаңартыңыз",
+        upload: "Жүктеу",
+        ordersHistory: "Тапсырыс тарихы",
+        noOrders: "Әлі тапсырыс жоқ",
+        noOrdersDesc: "Сіздің тапсырыстарыңыз осында көрсетіледі.",
+        toCatalog: "Каталогқа өту",
+        deleteAddress: "Мекенжайды жою",
+        addressAdded: "Мекенжай қосылды",
+        addressUpdated: "Мекенжай жаңартылды",
+        error: "Қате",
+        saveChanges: "Өзгерістерді сақтау"
+    },
+    orders: {
+        title: "Тапсырыс тарихы",
+        orderNo: "Тапсырыс #",
+        guestTitle: "Қонақ режимі",
+        guestDesc: "Қонақтарға тапсырыс тарихы қол жетімді емес. Сатып алуларды сақтау үшін тіркеліңіз.",
+        register: "Тіркелу",
+        toHome: "Басты бет",
+        emptyTitle: "Әлі тапсырысыңыз жоқ",
+        emptyDesc: "Алғашқы сатып алуды жасауға тамаша уақыт!",
+        details: "Толығырақ",
+        placed: "Оформлен",
+        itemsCount: "зат",
+        total: "Барлығы",
+        status: {
+            processing: "Өңделуде",
+            paid: "Төлеген",
+            shipped: "Жеткізілді",
+            completed: "Аяқталды",
+            cancelled: "Бұғатталған"
+        },
+        detail: {
+            title: "Тапсырыс #",
+            back: "Профильге қайту",
+            timeline: {
+                accepted: "Қабылданды",
+                packing: "Оралу中",
+                shipping: "Жеткізілу үстінде",
+                delivered: "Жеткізілді"
+            }
+        }
+    },
+    success: {
+        title: "Тапсырысыңыз сәтті жасалды!",
+        subtitle: "Тапсырыс #",
+        summary: "Тапсырыс ақпараты",
+        customer: "Тапсырыс беруші",
+        method: "Төлем әдісі",
+        courier: "Курьер",
+        address: "Жеткізу мекенжайы",
+        total: "Барлығы"
+    },
+    error: {
+        title: "Қате",
+        checkoutTitle: "Төлем қатесі",
+        checkoutDesc: "Төлем кезінде қате кетті.",
+        retry: "Қайталау",
+        return: "Басты бетке өту",
+        notFoundTitle: "Бет табылған жоқ"
+    },
+    info: {
+        about: {
+            title: "Біз туралы",
+            subtitle: "City Center — сауда болашағы",
+            desc: "Жылдам жеткізу және ақылды қызметпен жаңа азық-түлік тәжірибесі.",
+            trustDesc: "Біз тек сенімді жеткізушілерден ең үздік өнімдерді ұсынамыз."
+        },
+        delivery: {
+            title: "Жеткізу және төлем",
+            subtitle: "Жылдам, ыңғайлы, сенімді"
+        },
+        contacts: {
+            title: "Байланыс",
+            subtitle: "Біз әрқашан байланыстамыз",
+            office: "Офис",
+            address: "Мекенжай",
+            addressValue: "Ұсть-Каменогорск, Виноградова көшесі, 19а",
+            phone: "Телефон",
+            phoneValue: "+7 (776) 055-51-99",
+            email: "Email",
+            emailValue: "support@citycenter.kz",
+            hours: "Жұмыс уақыты",
+            hoursDesc: "Күн сайын 08:00-ден 22:00-ге дейін",
+            whatsapp: "WhatsApp-та жазыңыз",
+            whatsappTitle: "WhatsApp қолдау",
+            whatsappDesc: "Жылдам қолдау және жауап үшін WhatsApp-та жазыңыз."
+        },
+        faq: {
+            title: "Жиі қойылатын сұрақтар",
+            subtitle: "Танымал сұрақтарға жауаптар"
+        },
+        returns: {
+            title: "Тауарды қайтару",
+            subtitle: "Сапа кепілдігі"
+        },
+        privacy: {
+            title: "Құпиялылық саясаты"
+        },
+        terms: {
+            title: "Қолдану шарттары"
+        },
+        deals: {
+            title: "Акциялар және ұсыныстар"
+        }
+    },
+    ai_info: {
+        title: "Сіздің жеке AI сатып алу көмекшіңіз",
+        subtitle: "Шексіз іздеуді ұмыт. Біздің AI сізге сатып алу тізімін құрып, рецептер тауып, үздік ұсыныстарды ұсынады.",
+        howTitle: "Қалай жұмыс істейді",
+        readyTitle: "Жаңа тәжірибеге дайынсыз ба?",
+        readySubtitle: "Ең прогрессивті сауданы дәл қазір сынап көріңіз."
+    }
+};

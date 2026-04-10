@@ -1,60 +1,67 @@
 "use client";
 
-import React, { useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, PerspectiveCamera, Environment, Stars } from "@react-three/drei";
-import * as THREE from "three";
+import { Environment, Float, PerspectiveCamera } from "@react-three/drei";
+import { useRef } from "react";
 
-const FloatingSphere = ({ position, color, size, speed }) => {
-    const meshRef = useRef();
+function FruitOrb({ position, color, scale, speed }) {
+    const meshRef = useRef(null);
 
     useFrame((state, delta) => {
-        meshRef.current.rotation.x += delta * 0.2 * speed;
-        meshRef.current.rotation.y += delta * 0.3 * speed;
+        if (!meshRef.current) return;
+        meshRef.current.rotation.x += delta * 0.18 * speed;
+        meshRef.current.rotation.y += delta * 0.22 * speed;
+        meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * speed) * 0.12;
     });
 
     return (
-        <Float speed={speed} rotationIntensity={1} floatIntensity={2}>
-            <mesh ref={meshRef} position={position}>
-                <sphereGeometry args={[size, 64, 64]} />
+        <Float speed={1.1 + speed} rotationIntensity={0.8} floatIntensity={1.2}>
+            <mesh ref={meshRef} position={position} scale={scale}>
+                <icosahedronGeometry args={[1, 5]} />
                 <meshPhysicalMaterial
                     color={color}
-                    emissive={color}
-                    emissiveIntensity={0.2}
-                    roughness={0.1}
-                    metalness={0.1}
-                    transmission={0.6}
-                    thickness={1}
+                    roughness={0.18}
+                    metalness={0.06}
+                    transmission={0.42}
+                    thickness={1.2}
                     clearcoat={1}
+                    emissive={color}
+                    emissiveIntensity={0.15}
                 />
             </mesh>
         </Float>
     );
-};
+}
 
-const HeroScene = () => {
+function LeafRibbon({ position, rotation, color, scale }) {
     return (
-        <div className="absolute inset-0 z-0 bg-black">
+        <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.8}>
+            <mesh position={position} rotation={rotation} scale={scale}>
+                <torusKnotGeometry args={[0.55, 0.16, 110, 14, 2, 3]} />
+                <meshStandardMaterial color={color} roughness={0.35} metalness={0.08} />
+            </mesh>
+        </Float>
+    );
+}
+
+export default function HeroScene() {
+    return (
+        <div className="absolute inset-0">
             <Canvas>
-                <PerspectiveCamera makeDefault position={[0, 0, 10]} />
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f3ff" />
-                <pointLight position={[-10, -10, -10]} intensity={1} color="#ff00aa" />
+                <PerspectiveCamera makeDefault position={[0, 0, 8]} />
+                <ambientLight intensity={0.65} />
+                <directionalLight position={[2, 4, 5]} intensity={2} color="#fff6d3" />
+                <pointLight position={[-3, -1, 2]} intensity={1.4} color="#34d399" />
+                <pointLight position={[3, 1, 2]} intensity={1.2} color="#f59e0b" />
 
-                {/* Abstract "Fruits/Objects" - Neon/Glass style */}
-                <FloatingSphere position={[-4, 2, -2]} color="#00ff88" size={1.2} speed={1.5} /> {/* Green/Lime */}
-                <FloatingSphere position={[4, -2, -1]} color="#ffaa00" size={1.5} speed={1.2} /> {/* Orange */}
-                <FloatingSphere position={[0, 3, -5]} color="#ff0055" size={1} speed={2} /> {/* Red/Berry */}
-                <FloatingSphere position={[2, 4, 0]} color="#00ccff" size={0.8} speed={1.8} /> {/* Blue/Ice */}
-                <FloatingSphere position={[-3, -3, 1]} color="#aa00ff" size={1.1} speed={1.3} /> {/* Purple/Grape */}
-
-                <Stars radius={100} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
-                <Environment preset="city" />
+                <FruitOrb position={[-2.8, 1.2, -0.4]} color="#f59e0b" scale={1} speed={0.8} />
+                <FruitOrb position={[2.1, -1.4, 0.6]} color="#ef4444" scale={1.22} speed={0.6} />
+                <FruitOrb position={[0.2, 2.3, -1.6]} color="#22c55e" scale={0.7} speed={0.9} />
+                <LeafRibbon position={[1.1, 0.8, -1.5]} rotation={[0.6, 1.1, 0.2]} color="#166534" scale={0.78} />
+                <LeafRibbon position={[-1.5, -2.1, -0.6]} rotation={[1, 0.2, 0.5]} color="#84cc16" scale={0.66} />
+                <Environment preset="sunset" />
             </Canvas>
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black pointer-events-none" />
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,transparent_0%,rgba(255,247,234,0.12)_55%,rgba(255,247,234,0.3)_100%)]" />
         </div>
     );
-};
-
-export default HeroScene;
+}

@@ -8,17 +8,20 @@ import { AuthProvider } from "../context/AuthContext";
 import { WishlistProvider } from "../context/WishlistContext";
 import { ToastProvider } from "../context/ToastContext";
 import { AIProvider } from "../context/AIContext";
+import { LanguageProvider } from "@/context/LanguageContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import Toast from "@/components/ui/Toast";
 import Assistant from "@/components/AIAssistant/Assistant";
+import SiteChrome from "@/components/experience/SiteChrome";
 
 const inter = Inter({
     variable: "--font-inter",
-    subsets: ["latin"],
+    subsets: ["latin", "cyrillic"],
 });
 
 const manrope = Manrope({
     variable: "--font-manrope",
-    subsets: ["latin"],
+    subsets: ["latin", "cyrillic"],
 });
 
 export const metadata = {
@@ -37,17 +40,22 @@ export default function RootLayout({ children }) {
     return (
         <html lang="ru" suppressHydrationWarning>
             <body className={`${inter.variable} ${manrope.variable} antialiased`}>
+                <SiteChrome />
                 <AuthProvider>
                     <CartProvider>
                         <OrderProvider>
                             <AIProvider>
                                 <WishlistProvider>
                                     <ToastProvider>
-                                        <Navbar />
-                                        <main className="min-h-screen pt-20">{children}</main>
-                                        <Footer />
-                                        <Toast />
-                                        <Assistant />
+                                        <ThemeProvider>
+                                            <LanguageProvider>
+                                                <Navbar />
+                                                <main className="site-main min-h-screen pt-20">{children}</main>
+                                                <Footer />
+                                                <Toast />
+                                                <Assistant />
+                                            </LanguageProvider>
+                                        </ThemeProvider>
                                     </ToastProvider>
                                 </WishlistProvider>
                             </AIProvider>

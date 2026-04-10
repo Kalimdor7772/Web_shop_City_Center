@@ -9,22 +9,25 @@ const genAI = process.env.GEMINI_API_KEY
 const FREE_DELIVERY_THRESHOLD = 15000;
 
 const SALES_SYSTEM_PROMPT = `
-Вы - дружелюбный и практичный AI-консультант онлайн-супермаркета City Center в Казахстане.
+Вы - дружелюбный, вежливый и понятный AI-консультант онлайн-супермаркета City Center в Казахстане.
 
 Правила:
 1. Отвечайте только на русском языке.
 2. Не выдумывайте товары и цены. Используйте только товары из переданного каталога.
-3. Ваша задача - помочь выбрать продукты, собрать корзину и довести клиента до оформления заказа.
-4. Если пользователь просит подборку, соберите ее по бюджету, количеству дней, числу людей и цели покупки.
-5. Если известны корзина, прошлые заказы, профиль и предпочтения пользователя, учитывайте их.
-6. Если корзина близка к бесплатной доставке, мягко предложите добрать полезные товары.
-7. Если спрашивают про КБЖУ, напоминайте про страницу /nutrition.
-8. Отвечайте строго JSON-объектом:
+3. Помогайте выбрать продукты, собрать корзину и довести клиента до оформления заказа.
+4. Отвечайте вежливо и ясно, даже если пользователь спрашивает просто про магазин, часы работы, доставку или контакты.
+5. Если пользователь просит подборку, соберите её по бюджету, количеству дней, числу людей и цели покупки.
+6. Если известны корзина, прошлые заказы, профиль и предпочтения пользователя, учитывайте их.
+7. Если корзина близка к бесплатной доставке, мягко предложите добрать полезные товары.
+8. Если спрашивают про КБЖУ, напоминайте про страницу /nutrition.
+9. Старайтесь выдавать JSON-объект, но если вы даёте обычный текстовый ответ, возвращайте поле reply с текстом, остальное можно оставить пустым.
+10. Если вы предлагаете конкретный товар, используйте действие add_to_cart:<productId> для добавления товара в корзину.
+11. Желательный формат:
 {
   "reply": "текст ответа",
   "emotion": "idle" | "thinking" | "happy" | "advising",
   "recommendedProductIds": ["id1", "id2"],
-  "actions": [{"label":"Открыть корзину","action":"navigate:/cart"}]
+  "actions": [{"label":"Открыть корзину","action":"navigate:/cart"}, {"label":"Добавить в корзину","action":"add_to_cart:123"}]
 }
 `;
 
@@ -459,6 +462,7 @@ const buildRuleBasedResponse = ({ type, userMessage, cart, products, preferences
 
     const directMatches = uniqueProducts(findProducts(products, message.split(/\s+/), 8), 8);
     if (directMatches.length > 0) {
+        const topProduct = directMatches[0];
         const { reply, actions } = addFreeDeliveryNudge(
             personalized?.favoriteCategories?.length
                 ? `Нашел подходящие товары. С учетом ваших предпочтений по категориям ${personalized.favoriteCategories.join(", ")} это самые релевантные варианты.`
@@ -473,9 +477,10 @@ const buildRuleBasedResponse = ({ type, userMessage, cart, products, preferences
             recommendedProductIds: directMatches.map((product) => product.id),
             actions: uniqueActions([
                 ...actions,
+                topProduct && { label: `Добавить ${topProduct.name} в корзину`, action: `add_to_cart:${topProduct.id}` },
                 { label: "Открыть каталог", action: "navigate:/catalog" },
                 { label: "Открыть корзину", action: "navigate:/cart" },
-            ]),
+            ].filter(Boolean)),
         };
     }
 
@@ -568,7 +573,7 @@ const getTokenUser = async (req) => {
 const tryOpenAIResponse = async ({ userMessage, cart, products, preferences, userContext }) => {
     if (!genAI) return null;
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const userPrompt = JSON.stringify({
         userMessage,
@@ -598,14 +603,21 @@ const tryOpenAIResponse = async ({ userMessage, cart, products, preferences, use
     ]);
 
     const responseText = result.response.text();
-    
-    // Parse JSON from response - Gemini might add extra text
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) {
-        throw new Error("Failed to extract JSON from Gemini response");
+    if (jsonMatch) {
+        try {
+            return JSON.parse(jsonMatch[0]);
+        } catch (e) {
+            console.warn("Gemini JSON parse failed, falling back to raw text reply", e);
+        }
     }
 
-    return JSON.parse(jsonMatch[0]);
+    return {
+        reply: responseText.trim(),
+        emotion: "happy",
+        recommendedProductIds: [],
+        actions: [],
+    };
 };
 
 export const chatWithAI = async (req, res) => {

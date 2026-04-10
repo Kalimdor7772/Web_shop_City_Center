@@ -43,6 +43,9 @@ model Category {
   id        String    @id @default(uuid())
   name      String    @unique
   image     String?
+  parentId  String?
+  parent    Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  subcategories Category[] @relation("CategoryHierarchy")
   products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt

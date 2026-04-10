@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 /* eslint-disable @next/next/no-img-element */
 
 import React, { useState, useEffect } from "react";
@@ -45,9 +45,9 @@ function TabButton({ id, icon: Icon, label, activeTab, onSelect }) {
     return (
         <button
             onClick={() => onSelect(id)}
-            className={`w-full flex items-center gap-4 p-4 rounded-[1.25rem] transition-all duration-300 ${activeTab === id
+            className={`w-full flex items-center gap-4 rounded-[1.25rem] p-4 transition-all duration-300 ${activeTab === id
                 ? 'bg-gray-900 text-white shadow-xl shadow-black/10'
-                : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                : 'glass-panel text-gray-500 hover:text-gray-900'
                 }`}
         >
             <Icon size={20} className={activeTab === id ? 'text-green-400' : ''} />
@@ -120,11 +120,11 @@ export default function ProfilePage() {
             style: 'decimal',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
-        }).format(Math.round(price)).replace(/\u00A0/g, ' ') + " ₸";
+        }).format(Math.round(price)).replace(/\u00A0/g, ' ') + " в‚ё";
     };
 
     const formatDate = (dateString) => {
-        if (!dateString) return "Неизвестно";
+        if (!dateString) return "РќРµРёР·РІРµСЃС‚РЅРѕ";
         return new Date(dateString).toLocaleDateString('ru-RU', {
             day: 'numeric',
             month: 'long',
@@ -166,7 +166,7 @@ export default function ProfilePage() {
     };
 
     return (
-        <main className="min-h-screen bg-[#F8F9FA] pt-32 pb-24 px-4 sm:px-8 relative overflow-hidden">
+        <main className="organic-section relative min-h-screen overflow-hidden px-4 pb-24 pt-32 sm:px-8">
             {/* Background elements */}
             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-green-500/5 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[120px] -ml-64 -mb-64 pointer-events-none" />
@@ -181,7 +181,7 @@ export default function ProfilePage() {
 
                     {/* Sidebar */}
                     <aside className="lg:col-span-1 space-y-8">
-                        <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] border border-white p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)]">
+                        <div className="section-shell rounded-[2.5rem] p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)]">
                             <div className="flex flex-col items-center text-center mb-8">
                                 <div className="mb-6">
                                     <AvatarUpload
@@ -203,11 +203,11 @@ export default function ProfilePage() {
                                 <TabButton id="orders" icon={Package} label={t.profile.myOrders} activeTab={activeTab} onSelect={setActiveTab} />
                                 <TabButton id="addresses" icon={MapPin} label={t.profile.addresses} activeTab={activeTab} onSelect={setActiveTab} />
 
-                                <div className="h-px bg-gray-100 my-4 mx-2" />
+                                <div className="mx-2 my-4 h-px bg-white/70" />
 
                                 <button
                                     onClick={logout}
-                                    className="w-full flex items-center gap-4 p-4 rounded-[1.25rem] text-red-500 hover:bg-red-50 transition-all font-bold"
+                                    className="glass-panel flex w-full items-center gap-4 rounded-[1.25rem] p-4 font-bold text-red-500 transition-all hover:bg-red-50/80"
                                 >
                                     <LogOut size={20} />
                                     <span>{t.profile.logout}</span>
@@ -222,9 +222,9 @@ export default function ProfilePage() {
                         >
                             <div className="relative z-10">
                                 <h3 className="text-2xl font-black mb-2">Kaspi Gold</h3>
-                                <p className="text-white/70 font-medium text-sm mb-6">Получайте 10% кэшбэка при оплате через Kaspi QR</p>
+                                <p className="text-white/70 font-medium text-sm mb-6">РџРѕР»СѓС‡Р°Р№С‚Рµ 10% РєСЌС€Р±СЌРєР° РїСЂРё РѕРїР»Р°С‚Рµ С‡РµСЂРµР· Kaspi QR</p>
                                 <button className="px-6 py-3 bg-white text-red-600 rounded-2xl font-black text-sm shadow-xl">
-                                    Подробнее
+                                    РџРѕРґСЂРѕР±РЅРµРµ
                                 </button>
                             </div>
                             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
@@ -243,7 +243,7 @@ export default function ProfilePage() {
                                     transition={{ duration: 0.4 }}
                                     className="space-y-8"
                                 >
-                                    <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] border border-white p-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)] relative overflow-hidden">
+                                    <div className="section-shell relative overflow-hidden rounded-[2.5rem] p-10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.05)]">
                                         <div className="flex items-center justify-between mb-10 relative z-10">
                                             <h3 className="text-2xl font-black text-gray-900">{t.profile.personalInfo}</h3>
                                             {!isEditing ? (
@@ -252,7 +252,7 @@ export default function ProfilePage() {
                                                         setEditForm(buildEditForm(user));
                                                         setIsEditing(true);
                                                     }}
-                                                    className="flex items-center gap-2 text-green-600 font-black hover:text-green-700 transition-colors bg-green-50 px-4 py-2 rounded-xl"
+                                                    className="glass-panel flex items-center gap-2 rounded-xl bg-green-50/80 px-4 py-2 font-black text-green-700 transition-colors hover:text-green-800"
                                                 >
                                                     <Edit2 size={16} />
                                                     <span>{t.profile.change}</span>
@@ -261,7 +261,7 @@ export default function ProfilePage() {
                                                 <div className="flex items-center gap-2">
                                                     <button
                                                         onClick={() => setIsEditing(false)}
-                                                        className="p-3 text-gray-400 hover:bg-gray-100 rounded-xl transition-all"
+                                                        className="glass-panel rounded-xl p-3 text-gray-400 transition-all hover:bg-white/80"
                                                     >
                                                         <X size={20} />
                                                     </button>
@@ -292,13 +292,13 @@ export default function ProfilePage() {
                                                         <input
                                                             value={editForm.firstName}
                                                             onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
-                                                            className={`w-full p-4 bg-white border ${errors.firstName ? 'border-red-500' : 'border-gray-100'} rounded-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500/20`}
+                                                            className={`w-full rounded-2xl border bg-white/80 p-4 font-bold text-gray-900 ${errors.firstName ? 'border-red-500' : 'border-white/70'} focus:outline-none focus:ring-2 focus:ring-green-500/20`}
                                                             placeholder={t.profile.firstName}
                                                         />
                                                         {errors.firstName && <p className="text-red-500 text-xs font-bold mt-1">{errors.firstName}</p>}
                                                     </div>
                                                 ) : (
-                                                    <p className="text-lg font-bold text-gray-900 border-b border-transparent py-4">{user?.firstName || "—"}</p>
+                                                    <p className="text-lg font-bold text-gray-900 border-b border-transparent py-4">{user?.firstName || "вЂ”"}</p>
                                                 )}
                                             </div>
 
@@ -311,11 +311,11 @@ export default function ProfilePage() {
                                                     <input
                                                         value={editForm.lastName}
                                                         onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
-                                                        className="w-full p-4 bg-white border border-gray-100 rounded-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                                                        className="w-full rounded-2xl border border-white/70 bg-white/80 p-4 font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                                                         placeholder={t.profile.lastName}
                                                     />
                                                 ) : (
-                                                    <p className="text-lg font-bold text-gray-900 border-b border-transparent py-4">{user?.lastName || "—"}</p>
+                                                    <p className="text-lg font-bold text-gray-900 border-b border-transparent py-4">{user?.lastName || "вЂ”"}</p>
                                                 )}
                                             </div>
 
@@ -329,13 +329,13 @@ export default function ProfilePage() {
                                                         <input
                                                             value={editForm.phone}
                                                             onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
-                                                            className={`w-full p-4 bg-white border ${errors.phone ? 'border-red-500' : 'border-gray-100'} rounded-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-500/20`}
+                                                            className={`w-full rounded-2xl border bg-white/80 p-4 font-bold text-gray-900 ${errors.phone ? 'border-red-500' : 'border-white/70'} focus:outline-none focus:ring-2 focus:ring-green-500/20`}
                                                             placeholder="+7 (___) ___-__-__"
                                                         />
                                                         {errors.phone && <p className="text-red-500 text-xs font-bold mt-1">{errors.phone}</p>}
                                                     </div>
                                                 ) : (
-                                                    <p className="text-lg font-bold text-gray-900 border-b border-transparent py-4">{user?.phone || "—"}</p>
+                                                    <p className="text-lg font-bold text-gray-900 border-b border-transparent py-4">{user?.phone || "вЂ”"}</p>
                                                 )}
                                             </div>
 
@@ -345,7 +345,7 @@ export default function ProfilePage() {
                                                     <Mail size={12} /> {t.profile.email}
                                                 </label>
                                                 <p className="text-lg font-bold text-gray-900 border-b border-transparent py-4">
-                                                    {user?.email || "Не указан"}
+                                                    {user?.email || "РќРµ СѓРєР°Р·Р°РЅ"}
                                                 </p>
                                             </div>
 
@@ -382,7 +382,7 @@ export default function ProfilePage() {
                                             <motion.div
                                                 key={i}
                                                 whileHover={{ y: -5 }}
-                                                className="bg-white/60 backdrop-blur-3xl rounded-[2rem] border border-white p-6 shadow-sm flex items-center gap-4 cursor-default"
+                                                className="glass-panel-strong flex cursor-default items-center gap-4 rounded-[2rem] p-6 shadow-sm"
                                             >
                                                 <div className={`p-4 rounded-2xl ${stat.color}`}>
                                                     <stat.icon size={24} />
@@ -412,7 +412,7 @@ export default function ProfilePage() {
                                     </div>
 
                                     {orders.length === 0 ? (
-                                        <div className="bg-white/60 backdrop-blur-3xl rounded-[3rem] p-20 text-center border border-white">
+                                        <div className="section-shell rounded-[3rem] p-20 text-center">
                                             <ShoppingBag size={64} className="mx-auto text-gray-200 mb-6" />
                                             <h4 className="text-2xl font-black text-gray-900 mb-2">{t.profile.noOrders}</h4>
                                             <p className="text-gray-400 font-medium mb-10">{t.profile.noOrdersDesc}</p>
@@ -425,7 +425,7 @@ export default function ProfilePage() {
                                     ) : (
                                         <div className="space-y-6">
                                             {orders.map((order) => (
-                                                <div key={order.id} className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] border border-white p-8 shadow-sm hover:shadow-xl transition-all duration-500 group">
+                                                <div key={order.id} className="glass-panel-strong group rounded-[2.5rem] p-8 shadow-sm transition-all duration-500 hover:shadow-xl">
                                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                                                         <div className="space-y-2">
                                                             <div className="flex items-center gap-3">
@@ -490,7 +490,7 @@ export default function ProfilePage() {
                                     </div>
 
                                     {/* Primary Onboarding Address */}
-                                    <div className="bg-white/60 backdrop-blur-3xl rounded-[2.5rem] border border-white p-8 shadow-sm relative group overflow-hidden">
+                                    <div className="glass-panel-strong relative overflow-hidden rounded-[2.5rem] p-8 shadow-sm">
                                         <div className="flex items-center gap-4 mb-6">
                                             <div className="p-4 bg-green-500 text-white rounded-2xl shadow-xl shadow-green-500/20">
                                                 <MapPin size={24} />
@@ -514,7 +514,7 @@ export default function ProfilePage() {
                                         <div className="absolute top-8 right-8 flex gap-2">
                                             <button
                                                 onClick={() => openAddressModal("edit", "primary")}
-                                                className="p-3 bg-gray-50 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all"
+                                                className="glass-panel rounded-xl p-3 text-gray-400 transition-all hover:bg-green-50/80 hover:text-green-600"
                                             >
                                                 <Edit2 size={16} />
                                             </button>
@@ -523,7 +523,7 @@ export default function ProfilePage() {
 
                                     {/* Supplementary Addresses could be mapped here */}
                                     {(profile.addresses || []).map((addr, idx) => (
-                                        <div key={idx} className="bg-white/40 border border-gray-100 rounded-[2.5rem] p-8 shadow-sm flex items-center justify-between hover:bg-white/60 transition-all">
+                                        <div key={idx} className="glass-panel flex items-center justify-between rounded-[2.5rem] p-8 shadow-sm transition-all hover:bg-white/70">
                                             <div className="flex items-center gap-4">
                                                 <div className="p-4 bg-gray-100 text-gray-400 rounded-2xl">
                                                     <Navigation size={24} />
@@ -558,3 +558,4 @@ export default function ProfilePage() {
         </main>
     );
 }
+

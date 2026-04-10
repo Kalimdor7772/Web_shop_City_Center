@@ -24,7 +24,7 @@ export default function ContactsPage() {
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-white mb-1">{t.info.contacts.office}</h3>
-                                <p className="text-gray-500">{t.info.contacts.address}</p>
+                                <p className="text-gray-500">{t.info.contacts.addressValue}</p>
                             </div>
                         </div>
 
@@ -34,7 +34,7 @@ export default function ContactsPage() {
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-white mb-1">{t.info.contacts.phone}</h3>
-                                <p className="text-gray-500">+7 (777) 123-45-67</p>
+                                <p className="text-gray-500">{t.info.contacts.phoneValue}</p>
                             </div>
                         </div>
 
@@ -44,7 +44,7 @@ export default function ContactsPage() {
                             </div>
                             <div>
                                 <h3 className="text-lg font-bold text-white mb-1">{t.info.contacts.email}</h3>
-                                <p className="text-gray-500">support@citycenter.kz</p>
+                                <p className="text-gray-500">{t.info.contacts.emailValue}</p>
                             </div>
                         </div>
 
@@ -61,9 +61,9 @@ export default function ContactsPage() {
 
                     <div className="bg-gradient-to-br from-green-600 to-emerald-800 rounded-3xl p-8 flex flex-col justify-between text-white">
                         <div>
-                            <h3 className="text-3xl font-black mb-4">WhatsApp Support</h3>
+                            <h3 className="text-3xl font-black mb-4">{t.info.contacts.whatsappTitle}</h3>
                             <p className="opacity-90 leading-relaxed mb-8">
-                                Напишите нам в WhatsApp для быстрого решения любых вопросов. Мы отвечаем в течение 5 минут.
+                                {t.info.contacts.whatsappDesc}
                             </p>
                         </div>
                         <a href="#" className="flex items-center justify-center gap-3 bg-white text-green-700 font-bold py-4 rounded-xl hover:bg-gray-50 transition-colors">

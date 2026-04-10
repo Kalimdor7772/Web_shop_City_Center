@@ -15,10 +15,21 @@ async function fetchAPI(endpoint, options = {}) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${BASE_URL}${endpoint}`, {
-        ...options,
-        headers,
-    });
+    let response;
+
+    try {
+        response = await fetch(`${BASE_URL}${endpoint}`, {
+            ...options,
+            headers,
+        });
+    } catch (error) {
+        const networkError = new Error(
+            'Не удалось подключиться к серверу. Запусти backend на http://localhost:5000 и попробуй снова.'
+        );
+        networkError.cause = error;
+        networkError.status = 0;
+        throw networkError;
+    }
 
     const isJson = response.headers.get('content-type')?.includes('application/json');
     const data = isJson ? await response.json() : {};

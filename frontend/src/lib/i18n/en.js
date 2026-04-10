@@ -1,0 +1,302 @@
+export const en = {
+    common: {
+        addToCart: "Add to cart",
+        buyNow: "Buy now",
+        checkout: "Checkout",
+        cancel: "Cancel",
+        confirm: "Confirm",
+        save: "Save",
+        delete: "Delete",
+        edit: "Edit",
+        back: "Back",
+        loading: "Loading...",
+        error: "Error",
+        success: "Success",
+        search: "Search...",
+        price: "Price",
+        quantity: "Qty",
+        total: "Total",
+        showMore: "Show more",
+        currency: "₸"
+    },
+    nav: {
+        home: "Home",
+        catalog: "Catalog",
+        cart: "Cart",
+        profile: "Profile",
+        admin: "Admin",
+        login: "Login",
+        logout: "Logout",
+        searchPlaceholder: "Search products...",
+        deals: "Deals",
+        ai: "AI Assistant",
+        guest: "Guest"
+    },
+    footer: {
+        brandDesc: "Fresh groceries, smart shopping and fast delivery in Kazakhstan.",
+        nav: "Navigation",
+        contacts: "Contacts",
+        payment: "Payment",
+        paymentDesc: "Secure payments protected by HTTPS/SSL encryption.",
+        secure: "This site supports HTTPS and is protected by SSL encryption",
+        rights: "City Center. All rights reserved.",
+        privacy: "Privacy Policy",
+        terms: "Terms of Use"
+    },
+    auth: {
+        loginTitle: "Sign in",
+        registerTitle: "Create account",
+        welcome: "Welcome back",
+        signUp: "Sign up",
+        experienceFuture: "The future of shopping is here",
+        startJourney: "Start your premium shopping journey",
+        phoneOrEmail: "Phone or Email",
+        phoneLabel: "Phone number",
+        passwordLabel: "Password",
+        createPassword: "Create password",
+        confirmPassword: "Confirm password",
+        firstNameLabel: "First name",
+        lastNameLabel: "Last name",
+        submit: "Login",
+        registerSubmit: "Register",
+        noAccount: "No account?",
+        createAccount: "Create one",
+        haveAccount: "Already have an account?",
+        signIn: "Sign in",
+        logoutConfirm: "Are you sure you want to logout?",
+        back: "Back",
+        terms: "By continuing, you agree to our",
+        termsLink: "Terms of Service",
+        errors: {
+            required: "Required",
+            phoneRequired: "Phone is required",
+            passwordRequired: "Password is required",
+            minChar: "Minimum 6 characters",
+            mismatch: "Passwords do not match"
+        }
+    },
+    home: {
+        heroTitle: "Groceries delivered fast",
+        heroSubtitle: "Fresh food, ready meals and home essentials delivered to your door.",
+        deliveryBadge: "⚡ Delivered in 15 minutes",
+        shopNow: "Browse catalog",
+        deals: "Deals",
+        categoriesTitle: "Categories",
+        categoriesSubtitle: "Freshness in every delivery",
+        popularTitle: "Popular",
+        popularSubtitle: "Frequently bought together",
+        ctaTitle: "Ready to fill your fridge?",
+        ctaSubtitle: "First delivery is free! Try the service now.",
+        ctaButton: "Go to catalog",
+        trust: {
+            delivery15: "15-minute delivery",
+            delivery15Desc: "We arrive faster than you can get hungry.",
+            freeDelivery: "Free delivery",
+            freeDeliveryDesc: "Free delivery for orders over 5000 ₸.",
+            quality: "Quality guarantee",
+            qualityDesc: "Money back if you are not satisfied.",
+            care: "Caring service",
+            careDesc: "We carefully prepare every order."
+        },
+        cat: {
+            produce: "Fruits & Vegetables",
+            bakery: "Bakery",
+            dairy: "Dairy",
+            meat: "Meat",
+            seafood: "Seafood",
+            grocery: "Grocery",
+            coffee: "Coffee",
+            sweets: "Sweets"
+        }
+    },
+    cart: {
+        title: "Cart",
+        emptyTitle: "Your cart is empty",
+        emptyDesc: "Add products from the catalog to place an order.",
+        goToCatalog: "Go to catalog",
+        clearCart: "Clear cart",
+        clearConfirm: "Are you sure you want to clear the cart?",
+        itemsCount: "Items in cart:",
+        summary: "Order summary",
+        items: "Items",
+        discount: "Discount",
+        delivery: "Delivery",
+        free: "Free",
+        total: "Total",
+        checkout: "Proceed to checkout",
+        secure: "Secure payment guaranteed"
+    },
+    checkout: {
+        title: "Checkout",
+        subtitle: "Delivery to your door",
+        addressTitle: "Delivery address",
+        entrance: "Entrance",
+        floor: "Floor",
+        comment: "Comment",
+        commentPlaceholder: "Intercom code, leave by the door...",
+        saveAddress: "Save this address to my profile",
+        paymentMethod: "Payment method",
+        recommended: "Recommended",
+        fastQr: "Fast QR payment",
+        onDelivery: "On delivery",
+        cash: "Cash",
+        payCourier: "Pay to courier",
+        summaryTitle: "Summary",
+        toPay: "To pay",
+        confirm: "Confirm",
+        processing: "Processing...",
+        ssl: "This site runs over HTTPS and is protected by SSL encryption",
+        support: "24/7 support",
+        freeCall: "Free in KZ"
+    },
+    forms: {
+        street: "Street",
+        house: "House",
+        apt: "Apt/Office",
+        entrance: "Entrance",
+        floor: "Floor",
+        comment: "Comment",
+        commentPlaceholder: "Intercom code, leave at the door...",
+        city: "City",
+        selectCity: "Select a city",
+        phone: "Phone"
+    },
+    profile: {
+        title: "Profile",
+        personalInfo: "Personal information",
+        myOrders: "My orders",
+        addresses: "Addresses",
+        logout: "Logout",
+        logoutConfirm: "Are you sure you want to logout?",
+        edit: "Edit",
+        change: "Change",
+        save: "Save",
+        saving: "Saving...",
+        cancel: "Cancel",
+        firstName: "First name",
+        lastName: "Last name",
+        phone: "Phone",
+        email: "Email",
+        regDate: "Registration date",
+        status: "Account status",
+        premium: "Premium client",
+        totalOrders: "Total orders",
+        favorites: "Favorites",
+        bonuses: "Bonuses",
+        addAddress: "Add address",
+        primaryAddress: "Primary address",
+        editProfile: "Edit profile",
+        updateData: "Update your personal details",
+        upload: "Upload",
+        ordersHistory: "Order history",
+        noOrders: "No orders yet",
+        noOrdersDesc: "Your orders will appear here.",
+        toCatalog: "To catalog",
+        deleteAddress: "Delete address",
+        addressAdded: "Address added",
+        addressUpdated: "Address updated",
+        error: "Error",
+        saveChanges: "Save changes"
+    },
+    orders: {
+        title: "Order history",
+        orderNo: "Order #",
+        guestTitle: "Guest mode",
+        guestDesc: "Order history is not available for guests. Register to save your purchases.",
+        register: "Register",
+        toHome: "Home",
+        emptyTitle: "You have no orders yet",
+        emptyDesc: "It's a great time to make your first purchase!",
+        details: "Details",
+        placed: "Placed",
+        itemsCount: "items",
+        total: "Total",
+        status: {
+            processing: "Processing",
+            paid: "Paid",
+            shipped: "Shipped",
+            completed: "Completed",
+            cancelled: "Cancelled"
+        },
+        detail: {
+            title: "Order #",
+            back: "Back to profile",
+            timeline: {
+                accepted: "Accepted",
+                packing: "Packing",
+                shipping: "In transit",
+                delivered: "Delivered"
+            }
+        }
+    },
+    success: {
+        title: "Order successfully placed!",
+        subtitle: "Order #",
+        summary: "Order summary",
+        customer: "Customer",
+        method: "Payment method",
+        courier: "Courier",
+        address: "Delivery address",
+        total: "Total"
+    },
+    error: {
+        title: "Error",
+        checkoutTitle: "Checkout error",
+        checkoutDesc: "An error occurred during checkout.",
+        retry: "Try again",
+        return: "Return home",
+        notFoundTitle: "Page not found"
+    },
+    info: {
+        about: {
+            title: "About Us",
+            subtitle: "City Center — the future of shopping",
+            desc: "A fresh grocery experience with fast delivery and smart service.",
+            trustDesc: "We bring you the best products from trusted suppliers."
+        },
+        delivery: {
+            title: "Delivery & Payment",
+            subtitle: "Fast, convenient, reliable"
+        },
+        contacts: {
+            title: "Contacts",
+            subtitle: "We are always online",
+            office: "Office",
+            address: "Address",
+            addressValue: "Ust-Kamenogorsk, Vinogradova St. 19a",
+            phone: "Phone",
+            phoneValue: "+7 (776) 055-51-99",
+            email: "Email",
+            emailValue: "support@citycenter.kz",
+            hours: "Working hours",
+            hoursDesc: "Daily from 08:00 to 22:00",
+            whatsapp: "Chat in WhatsApp",
+            whatsappTitle: "WhatsApp support",
+            whatsappDesc: "Message us on WhatsApp for fast support and answers."
+        },
+        faq: {
+            title: "FAQ",
+            subtitle: "Answers to popular questions"
+        },
+        returns: {
+            title: "Returns",
+            subtitle: "Quality guarantee"
+        },
+        privacy: {
+            title: "Privacy Policy"
+        },
+        terms: {
+            title: "Terms of Use"
+        },
+        deals: {
+            title: "Deals & Offers"
+        }
+    },
+    ai_info: {
+        title: "Your personal AI shopping assistant",
+        subtitle: "Forget endless searching. Our AI will build your grocery list, find recipes and suggest the best deals.",
+        howTitle: "How it works",
+        readyTitle: "Ready for a new experience?",
+        readySubtitle: "Try the most advanced shopping today."
+    }
+};
