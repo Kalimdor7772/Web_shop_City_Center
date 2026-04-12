@@ -23,12 +23,12 @@
 }
 
 :root[data-theme="dark"] {
-  --background: #091512;
-  --foreground: #edf4ef;
-  --surface: rgba(13, 26, 23, 0.72);
-  --surface-strong: rgba(12, 24, 22, 0.9);
-  --surface-border: rgba(104, 155, 133, 0.18);
-  --muted: #9cb0a7;
+  --background: #07120f;
+  --foreground: #f8fbf7;
+  --surface: rgba(18, 34, 30, 0.84);
+  --surface-strong: rgba(12, 24, 22, 0.96);
+  --surface-border: rgba(104, 155, 133, 0.2);
+  --muted: #c1d1c3;
   --leaf: #40c48a;
   --leaf-deep: #1f9d68;
   --citrus: #f4c95d;
@@ -127,6 +127,13 @@ a {
     rgba(255, 255, 255, 0.32);
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(20px);
+}
+
+:root[data-theme="dark"] .section-shell {
+  border-color: rgba(104, 155, 133, 0.18);
+  background:
+    linear-gradient(180deg, rgba(13, 26, 23, 0.88), rgba(11, 23, 21, 0.78)),
+    rgba(9, 20, 16, 0.88);
 }
 
 .site-ambient {
@@ -246,8 +253,15 @@ a {
 :root[data-theme="dark"] .bg-white\/90,
 :root[data-theme="dark"] .bg-white\/70,
 :root[data-theme="dark"] .bg-gray-50,
-:root[data-theme="dark"] .bg-gray-100 {
+:root[data-theme="dark"] .bg-gray-100,
+:root[data-theme="dark"] .glass-panel,
+:root[data-theme="dark"] .glass-panel-strong {
   background-color: rgba(12, 24, 22, 0.9) !important;
+  border-color: rgba(104, 155, 133, 0.18) !important;
+}
+
+:root[data-theme="dark"] .glass-panel-strong {
+  background-color: rgba(11, 23, 21, 0.94) !important;
 }
 
 :root[data-theme="dark"] .bg-\[\#F8F9FA\],
@@ -255,22 +269,47 @@ a {
   background-color: #091512 !important;
 }
 
+:root[data-theme="dark"] [class*="bg-[linear-gradient(135deg,rgba(255,252,245,0.96),rgba(250,244,231,0.86))]"] {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.04)) !important;
+}
+
+:root[data-theme="dark"] [class*="bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(244,238,223,0.86))]"] {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.04)) !important;
+}
+
 :root[data-theme="dark"] .text-gray-900,
 :root[data-theme="dark"] .text-gray-800,
-:root[data-theme="dark"] .text-gray-700 {
-  color: #edf4ef !important;
+:root[data-theme="dark"] .text-gray-700,
+:root[data-theme="dark"] .text-stone-900,
+:root[data-theme="dark"] .text-stone-800,
+:root[data-theme="dark"] .text-stone-700,
+:root[data-theme="dark"] .text-slate-900,
+:root[data-theme="dark"] .text-slate-800,
+:root[data-theme="dark"] .text-slate-700 {
+  color: #fbfdfa !important;
 }
 
 :root[data-theme="dark"] .text-gray-600,
 :root[data-theme="dark"] .text-gray-500,
 :root[data-theme="dark"] .text-gray-400,
+:root[data-theme="dark"] .text-gray-300,
 :root[data-theme="dark"] .text-stone-600,
 :root[data-theme="dark"] .text-stone-500,
 :root[data-theme="dark"] .text-stone-400,
+:root[data-theme="dark"] .text-stone-300,
 :root[data-theme="dark"] .text-slate-600,
 :root[data-theme="dark"] .text-slate-500,
-:root[data-theme="dark"] .text-slate-400 {
-  color: #9cb0a7 !important;
+:root[data-theme="dark"] .text-slate-400,
+:root[data-theme="dark"] .text-slate-300,
+:root[data-theme="dark"] .text-zinc-600,
+:root[data-theme="dark"] .text-zinc-500,
+:root[data-theme="dark"] .text-zinc-400,
+:root[data-theme="dark"] .text-zinc-300,
+:root[data-theme="dark"] .text-neutral-600,
+:root[data-theme="dark"] .text-neutral-500,
+:root[data-theme="dark"] .text-neutral-400,
+:root[data-theme="dark"] .text-neutral-300 {
+  color: #d4e5d8 !important;
 }
 
 :root[data-theme="dark"] .border-gray-50,
