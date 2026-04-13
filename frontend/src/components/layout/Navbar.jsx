@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { ShoppingCart, User, Search, Menu, X, Heart, Sun, Moon, Monitor } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../context/CartContext";
@@ -19,12 +20,21 @@ const themeOptions = [
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const router = useRouter();
+    const pathname = usePathname();
     const { locale, setLocale } = useLanguage();
     const { theme, mounted, setTheme } = useTheme();
     const activeTheme = mounted ? theme : "system";
     const { totalItems } = useCart();
     const { wishlistItems } = useWishlist();
     const { user, isAuthenticated, logout, isInitialized } = useAuth(); // Added isInitialized
+    const handleSearchClick = () => {
+        if (pathname === "/catalog") {
+            window.dispatchEvent(new Event("catalog:focus-search"));
+            return;
+        }
+        router.push("/catalog?focusSearch=1");
+    };
 
     return (
         <nav className="fixed top-0 left-0 z-50 w-full px-3 py-3 md:px-5">
@@ -40,7 +50,13 @@ const Navbar = () => {
                 </div>
 
                 <div className="hidden items-center gap-4 md:flex">
-                    <button className="glass-panel flex h-11 w-11 items-center justify-center rounded-full text-gray-600 hover:-translate-y-0.5 hover:text-emerald-700" data-cursor="magnetic">
+                    <button
+                        type="button"
+                        onClick={handleSearchClick}
+                        aria-label="Открыть поиск в каталоге"
+                        className="glass-panel flex h-11 w-11 items-center justify-center rounded-full text-gray-600 hover:-translate-y-0.5 hover:text-emerald-700"
+                        data-cursor="magnetic"
+                    >
                         <Search size={20} />
                     </button>
                     <div className="glass-panel flex items-center gap-2 rounded-full px-2 py-1">

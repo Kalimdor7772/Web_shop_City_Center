@@ -1,6 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Filter, Minus, Plus, Search, ShoppingCart, Sparkles, Star, X } from "lucide-react";
 import { useCart } from "../../context/CartContext";
@@ -36,6 +37,7 @@ function Promo({ item, onPick }) {
 }
 
 export default function CatalogPage() {
+    const searchParams = useSearchParams();
     const { addToCart } = useCart();
     const { showToast } = useToast();
     const { trackCategory } = useAI();
@@ -49,6 +51,13 @@ export default function CatalogPage() {
     const [filtersOpen, setFiltersOpen] = useState(false);
     const [selected, setSelected] = useState(null);
     const [qty, setQty] = useState(1);
+    const searchInputRef = useRef(null);
+
+    const focusSearchInput = useCallback(() => {
+        if (!searchInputRef.current) return;
+        searchInputRef.current.focus();
+        searchInputRef.current.select();
+    }, []);
 
     useEffect(() => {
         const run = async () => {
@@ -61,6 +70,27 @@ export default function CatalogPage() {
         };
         run();
     }, []);
+
+    useEffect(() => {
+        const handleFocusSearch = () => {
+            requestAnimationFrame(() => {
+                focusSearchInput();
+            });
+        };
+
+        window.addEventListener("catalog:focus-search", handleFocusSearch);
+        return () => window.removeEventListener("catalog:focus-search", handleFocusSearch);
+    }, [focusSearchInput]);
+
+    useEffect(() => {
+        if (searchParams.get("focusSearch") !== "1") return undefined;
+
+        const timer = window.setTimeout(() => {
+            focusSearchInput();
+        }, 120);
+
+        return () => window.clearTimeout(timer);
+    }, [focusSearchInput, searchParams]);
 
     const categories = useMemo(() => [ALL, ...new Set(products.map((p) => p.category).filter(Boolean))], [products]);
     const uniqueBrands = useMemo(() => [...new Set(products.map((p) => p.brand).filter(Boolean))], [products]);
@@ -142,6 +172,7 @@ export default function CatalogPage() {
                                     <div className="group relative flex-grow sm:max-w-md">
                                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 transition-colors group-hover:text-emerald-700" size={18} />
                                         <input
+                                            ref={searchInputRef}
                                             type="text"
                                             placeholder="Искать продукты, бренды и любимые позиции..."
                                             value={query}
@@ -285,7 +316,7 @@ export default function CatalogPage() {
 
             <AnimatePresence>
                 {filtersOpen && (
-                    <div className="fixed inset-0 z-50 flex justify-end">
+                    <div className="fixed inset-0 z-[70] flex justify-end">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setFiltersOpen(false)} className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
                         <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="section-shell relative h-full w-full max-w-sm overflow-y-auto rounded-l-[2rem] shadow-2xl">
                             <div className="flex items-center justify-between border-b border-white/70 p-6">
@@ -326,7 +357,7 @@ export default function CatalogPage() {
 
             <AnimatePresence>
                 {selected && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelected(null)} className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
                         <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="section-shell relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] shadow-2xl md:flex-row">
                             <button onClick={() => setSelected(null)} className="glass-panel absolute right-4 top-4 z-10 rounded-full p-2 text-gray-900 transition-colors hover:bg-white"><X size={20} /></button>
