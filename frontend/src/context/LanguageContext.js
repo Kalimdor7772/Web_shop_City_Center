@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, Fragment, useContext, useEffect, useMemo, useState } from "react";
 import { setLocale as updateLocale, supportedLocales } from "@/lib/i18n";
 
 const LanguageContext = createContext({
@@ -9,23 +9,20 @@ const LanguageContext = createContext({
     supportedLocales: ["kk", "ru", "en"],
 });
 
+const getInitialLocale = () => {
+    if (typeof window === "undefined") return "ru";
+
+    const stored = localStorage.getItem("locale");
+    if (stored && supportedLocales.includes(stored)) {
+        return stored;
+    }
+
+    const browserLocale = navigator.language.slice(0, 2).toLowerCase();
+    return supportedLocales.includes(browserLocale) ? browserLocale : "ru";
+};
+
 export const LanguageProvider = ({ children }) => {
-    const [locale, setLocaleState] = useState(() => {
-        if (typeof window === "undefined") {
-            return "ru";
-        }
-
-        const stored = localStorage.getItem("locale");
-        const initialLocale = stored && supportedLocales.includes(stored)
-            ? stored
-            : (() => {
-                const browserLocale = navigator.language.slice(0, 2).toLowerCase();
-                return supportedLocales.includes(browserLocale) ? browserLocale : "ru";
-            })();
-
-        updateLocale(initialLocale);
-        return initialLocale;
-    });
+    const [locale, setLocaleState] = useState(getInitialLocale);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -39,7 +36,11 @@ export const LanguageProvider = ({ children }) => {
         [locale]
     );
 
-    return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+    return (
+        <LanguageContext.Provider value={value}>
+            <Fragment key={locale}>{children}</Fragment>
+        </LanguageContext.Provider>
+    );
 };
 
 export const useLanguage = () => useContext(LanguageContext);

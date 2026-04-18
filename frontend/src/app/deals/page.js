@@ -5,6 +5,7 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, ShoppingCart, TrendingUp, Zap } from "lucide-react";
+import { t } from "@/lib/i18n";
 import { products } from "@/lib/data";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
@@ -18,7 +19,7 @@ function SectionHeader({ title, icon: Icon, accent, iconClass = "text-gray-900" 
                 <Icon className={iconClass} size={28} />
             </div>
             <div>
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-stone-500">special picks</p>
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-stone-500">{t.deals.sectionTag}</p>
                 <h2 className="text-3xl font-black tracking-[-0.04em] text-gray-900 md:text-4xl">{title}</h2>
             </div>
         </div>
@@ -83,7 +84,7 @@ function PromoCard({ product, onAddToCart }) {
                         className="flex w-full items-center justify-center gap-3 rounded-[1.4rem] bg-emerald-700 py-4 text-sm font-black text-white shadow-[0_18px_30px_rgba(31,157,104,0.24)] transition-all active:scale-95 hover:-translate-y-0.5 hover:bg-emerald-800"
                     >
                         <ShoppingCart size={18} />
-                        В корзину
+                        {t.common.addToCart}
                     </button>
                 </div>
             </div>
@@ -118,7 +119,7 @@ export default function DealsPage() {
             .slice(10, 14)
             .map((product) => ({
                 ...product,
-                badge: "Хит",
+                badge: t.deals.hitBadge,
                 badgeType: "hit"
             }));
 
@@ -131,7 +132,7 @@ export default function DealsPage() {
 
     const handleAddToCart = (product) => {
         addToCart(product);
-        showToast("Товар добавлен в корзину", { label: "В корзину", href: "/cart" });
+        showToast(t.common.addedToCart, { label: t.common.addToCart, href: "/cart" });
     };
 
     return (
@@ -148,14 +149,14 @@ export default function DealsPage() {
                                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose-400 opacity-70" />
                                 <span className="relative inline-flex h-3 w-3 rounded-full bg-rose-500" />
                             </span>
-                            <span>горячие предложения</span>
+                            <span>{t.deals.hotDealsLabel}</span>
                         </div>
 
                         <h1 className="font-heading text-5xl font-black leading-[0.92] tracking-[-0.05em] text-gray-900 md:text-7xl">
-                            Акции и предложения
+                            {t.deals.title}
                         </h1>
                         <p className="mx-auto mt-8 max-w-3xl text-xl font-medium leading-relaxed text-stone-600">
-                            Лучшие цены недели, выгодные наборы и подборки товаров, которые приятно брать сразу в корзину.
+                            {t.deals.subtitle}
                         </p>
                     </div>
                 </div>
@@ -163,7 +164,7 @@ export default function DealsPage() {
 
             <section className="organic-section px-3 py-10 md:px-5">
                 <div className="section-shell mx-auto max-w-7xl rounded-[3rem] px-6 py-10 md:px-8 md:py-12">
-                    <SectionHeader title="Горячие предложения" icon={Zap} accent="from-rose-200/80 to-orange-100" iconClass="text-rose-700" />
+                    <SectionHeader title={t.deals.hotDealsSectionTitle} icon={Zap} accent="from-rose-200/80 to-orange-100" iconClass="text-rose-700" />
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
                         {promoData.hotDeals.map((product) => (
                             <PromoCard key={product.id} product={product} onAddToCart={handleAddToCart} />
@@ -181,19 +182,22 @@ export default function DealsPage() {
                         <div className="relative z-10 flex h-full flex-col justify-between">
                             <div>
                                 <span className="glass-panel mb-6 inline-block rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-800">
-                                    flash sale
+                                    {t.deals.bannerHotLabel}
                                 </span>
                                 <h3 className="mb-4 text-4xl font-black leading-tight tracking-[-0.04em] md:text-5xl">
-                                    Свежее мясо
-                                    <br />
-                                    со скидкой 20%
+                                    {t.deals.bannerHotTitle.split("\n").map((line, index) => (
+                                        <React.Fragment key={index}>
+                                            {line}
+                                            {index + 1 < t.deals.bannerHotTitle.split("\n").length && <br />}
+                                        </React.Fragment>
+                                    ))}
                                 </h3>
                                 <p className="mb-10 max-w-xl text-lg font-medium leading-relaxed text-stone-600">
-                                    Подборка мясных и рыбных товаров со сниженной ценой на этой неделе.
+                                    {t.deals.bannerHotDescription}
                                 </p>
                             </div>
                             <Link href="/catalog" className="inline-flex w-fit items-center gap-3 rounded-[1.4rem] bg-emerald-700 px-7 py-4 text-sm font-black uppercase tracking-[0.18em] text-white shadow-[0_18px_30px_rgba(31,157,104,0.22)] transition-all hover:-translate-y-1 hover:gap-4 hover:bg-emerald-800">
-                                В каталог <ArrowRight size={18} />
+                                {t.deals.bannerHotCta} <ArrowRight size={18} />
                             </Link>
                         </div>
                     </motion.div>
@@ -210,14 +214,17 @@ export default function DealsPage() {
                 <div className="section-shell relative mx-auto flex max-w-7xl flex-col items-center gap-12 overflow-hidden rounded-[3.5rem] px-8 py-12 lg:flex-row lg:px-12">
                     <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,rgba(226,196,255,0.30),transparent_65%)] lg:block" />
                     <div className="relative z-10 flex-1 text-center lg:text-left">
-                        <span className="glass-panel mb-4 inline-block rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-violet-700">выгодный набор</span>
+                        <span className="glass-panel mb-4 inline-block rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-violet-700">{t.deals.bundle.label}</span>
                         <h3 className="mb-6 text-4xl font-black leading-tight tracking-[-0.04em] text-gray-900 md:text-5xl">
-                            Завтрак
-                            <br />
-                            для чемпиона
+                            {t.deals.bundle.title.split("\n").map((line, index) => (
+                                <React.Fragment key={index}>
+                                    {line}
+                                    {index + 1 < t.deals.bundle.title.split("\n").length && <br />}
+                                </React.Fragment>
+                            ))}
                         </h3>
                         <p className="mb-10 max-w-md text-lg font-medium leading-relaxed text-stone-600">
-                            Молочные продукты и выпечка в одной подборке по более приятной цене.
+                            {t.deals.bundle.description}
                         </p>
                         <div className="flex justify-center gap-4 lg:justify-start">
                             <span className="text-4xl font-black text-stone-300 line-through">3 500 ₸</span>
@@ -237,7 +244,7 @@ export default function DealsPage() {
 
             <section className="organic-section px-3 py-10 md:px-5">
                 <div className="section-shell mx-auto max-w-7xl rounded-[3rem] px-6 py-10 md:px-8 md:py-12">
-                    <SectionHeader title="Популярное со скидкой" icon={TrendingUp} accent="from-sky-200/80 to-cyan-100" iconClass="text-sky-700" />
+                    <SectionHeader title={t.deals.popularSectionTitle} icon={TrendingUp} accent="from-sky-200/80 to-cyan-100" iconClass="text-sky-700" />
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
                         {promoData.popularDeals.map((product) => (
                             <PromoCard key={product.id} product={product} onAddToCart={handleAddToCart} />
@@ -249,10 +256,10 @@ export default function DealsPage() {
             <section className="organic-section px-3 py-10 md:px-5">
                 <div className="mx-auto max-w-7xl overflow-hidden rounded-[3rem] bg-[linear-gradient(135deg,#147a54_0%,#1f9d68_45%,#f0b53c_130%)] p-10 text-white shadow-[0_30px_90px_rgba(31,157,104,0.26)] md:p-20">
                     <div className="mx-auto max-w-3xl text-center">
-                        <h2 className="text-4xl font-black leading-tight md:text-6xl">Готовы наполнить холодильник?</h2>
-                        <p className="mt-6 text-xl font-medium text-white/88">Перейдите в каталог и соберите корзину из акционных товаров за пару минут.</p>
+                        <h2 className="text-4xl font-black leading-tight md:text-6xl">{t.deals.final.title}</h2>
+                        <p className="mt-6 text-xl font-medium text-white/88">{t.deals.final.subtitle}</p>
                         <Link href="/catalog" className="mt-10 inline-flex items-center gap-3 rounded-[1.5rem] bg-white px-12 py-5 text-xl font-black text-emerald-800 shadow-[0_18px_40px_rgba(255,255,255,0.22)] transition-all hover:-translate-y-1">
-                            Перейти в каталог <ArrowRight size={22} />
+                            {t.deals.final.cta} <ArrowRight size={22} />
                         </Link>
                     </div>
                 </div>

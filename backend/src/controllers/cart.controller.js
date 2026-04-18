@@ -51,25 +51,37 @@ export const syncCart = async (req, res, next) => {
         }
 
         // 2. Clear existing items and add new ones (Simplified Sync)
-        // In a real production app, we might want to be more surgical, 
+        // In a real production app, we might want to be more surgical,
         // but for a full state sync, this is robust.
         await prisma.cartItem.deleteMany({
             where: { cartId: cart.id }
         });
 
-        const createdItems = await prisma.cartItem.createMany({
-            data: items.map(item => ({
-                cartId: cart.id,
-                productId: item.id,
-                quantity: item.quantity
+        const isValidUuid = (value) => typeof value === 'string' && /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(value);
+
+        const validItems = (items || [])
+            .map((item) => ({
+                productId: item?.id !== undefined && item?.id !== null ? String(item.id) : "",
+                quantity: Number(item?.quantity) || 0,
             }))
-        });
+            .filter((item) => isValidUuid(item.productId) && item.quantity > 0);
+
+        if (validItems.length > 0) {
+            await prisma.cartItem.createMany({
+                data: validItems.map((item) => ({
+                    cartId: cart.id,
+                    productId: item.productId,
+                    quantity: item.quantity,
+                }))
+            });
+        }
 
         res.status(200).json({
             success: true,
             data: {
                 message: "Cart synced successfully",
-                count: items.length
+                count: validItems.length,
+                skipped: (items || []).length - validItems.length,
             }
         });
 

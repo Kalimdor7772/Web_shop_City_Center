@@ -7,6 +7,7 @@ import { Heart, Plus, ShoppingCart, Star } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useToast } from "../../context/ToastContext";
+import { t } from "@/lib/i18n";
 import { formatPrice } from "@/lib/utils";
 import { getProductWeightLabel } from "@/lib/product";
 
@@ -17,12 +18,12 @@ const ProductCard = ({ product, onClick, compact = false }) => {
 
     if (!product) return null;
 
-    const weightLabel = getProductWeightLabel(product) || "Вес уточняется";
+    const weightLabel = getProductWeightLabel(product) || t.common.unknownWeight;
 
     const handleAddToCart = (event) => {
         event.stopPropagation();
         addToCart(product);
-        showToast("Товар добавлен в корзину", { label: "В корзину", href: "/cart" });
+        showToast(t.common.addedToCart, { label: t.common.addToCart, href: "/cart" });
     };
 
     const handleToggleWishlist = (event) => {
@@ -102,7 +103,7 @@ const ProductCard = ({ product, onClick, compact = false }) => {
                             onClick={handleAddToCart}
                             className="flex h-11 items-center gap-2 rounded-[1rem] bg-emerald-50 px-4 text-sm font-bold text-emerald-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-700 hover:text-white hover:shadow-lg"
                         >
-                            <span className="hidden sm:inline">В корзину</span>
+                            <span className="hidden sm:inline">{t.common.addToCart}</span>
                             <Plus size={20} className="sm:hidden" />
                             <ShoppingCart size={18} className="hidden sm:block" />
                         </button>

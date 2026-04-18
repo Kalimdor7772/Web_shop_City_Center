@@ -19,9 +19,9 @@ export default function Footer() {
                             {t.footer.brandDesc}
                         </p>
                         <div className="flex gap-4">
-                            <SocialLink href="#" icon={Instagram} />
-                            <SocialLink href="#" icon={Facebook} />
-                            <SocialLink href="#" icon={Twitter} />
+                            <SocialLink icon={Instagram} />
+                            <SocialLink icon={Facebook} />
+                            <SocialLink icon={Twitter} />
                         </div>
                     </div>
 
@@ -76,11 +76,11 @@ export default function Footer() {
 
                 <div className="flex flex-col items-center justify-between gap-4 border-t border-amber-100/80 pt-8 text-center md:flex-row md:text-left">
                     <p className="text-xs font-bold uppercase tracking-widest opacity-60">
-                        В© {new Date().getFullYear()} CITY CENTER. {t.footer.rights}
+                        © {new Date().getFullYear()} CITY CENTER. {t.footer.rights}
                     </p>
                     <div className="flex gap-6 text-xs font-bold opacity-60">
-                        <Link href="#" className="transition-colors hover:text-gray-900">{t.footer.privacy}</Link>
-                        <Link href="#" className="transition-colors hover:text-gray-900">{t.footer.terms}</Link>
+                        <Link href="/privacy" className="transition-colors hover:text-gray-900">{t.footer.privacy}</Link>
+                        <Link href="/terms" className="transition-colors hover:text-gray-900">{t.footer.terms}</Link>
                     </div>
                 </div>
             </div>
@@ -88,14 +88,13 @@ export default function Footer() {
     );
 }
 
-function SocialLink({ href, icon: Icon }) {
+function SocialLink({ icon: Icon }) {
     return (
-        <a
-            href={href}
+        <div
             className="flex h-10 w-10 items-center justify-center rounded-full border border-amber-100 bg-white/70 transition-all duration-300 hover:-translate-y-0.5 hover:bg-emerald-700 hover:text-white"
         >
             <Icon size={18} />
-        </a>
+        </div>
     );
 }
 

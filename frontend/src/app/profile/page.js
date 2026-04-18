@@ -120,7 +120,7 @@ export default function ProfilePage() {
             style: 'decimal',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
-        }).format(Math.round(price)).replace(/\u00A0/g, ' ') + " в‚ё";
+        }).format(Math.round(price)).replace(/\u00A0/g, ' ') + " \u20B8";
     };
 
     const formatDate = (dateString) => {
@@ -222,9 +222,9 @@ export default function ProfilePage() {
                         >
                             <div className="relative z-10">
                                 <h3 className="text-2xl font-black mb-2">Kaspi Gold</h3>
-                                <p className="text-white/70 font-medium text-sm mb-6">РџРѕР»СѓС‡Р°Р№С‚Рµ 10% РєСЌС€Р±СЌРєР° РїСЂРё РѕРїР»Р°С‚Рµ С‡РµСЂРµР· Kaspi QR</p>
+                                <p className="text-white/70 font-medium text-sm mb-6">Получите 10% кешбэка при оплате через Kaspi QR</p>
                                 <button className="px-6 py-3 bg-white text-red-600 rounded-2xl font-black text-sm shadow-xl">
-                                    РџРѕРґСЂРѕР±РЅРµРµ
+                                    Подробнее
                                 </button>
                             </div>
                             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
@@ -440,7 +440,7 @@ export default function ProfilePage() {
                                                         </div>
                                                         <div className="text-right">
                                                             <p className="text-2xl font-black text-gray-900">{formatPrice(order.totalPrice)}</p>
-                                                            <p className="text-xs text-gray-400 font-bold tracking-widest uppercase">{order.items.length} {t.orders.itemsCount}</p>
+                                                            <p className="text-xs text-gray-400 font-bold tracking-wide">{order.items.length} {t.orders.itemsCount}</p>
                                                         </div>
                                                     </div>
 

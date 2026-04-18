@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Frontend (Next.js)
 
-## Getting Started
+Frontend of the City Center project on Next.js App Router.
 
-First, run the development server:
+## Quick Start
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Create env file:
+   ```bash
+   cp .env.example .env.local
+   ```
+3. Start dev server:
+   ```bash
+   npm run dev
+   ```
+
+## Environment Variables
+
+- `NEXT_PUBLIC_API_URL` - public backend API URL (must include `/api` or it will be appended automatically).
+
+Example:
+
+```env
+NEXT_PUBLIC_API_URL=https://your-backend-domain.com/api
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build and Deployment Check
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Run local deploy checks before publishing:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run deploy:check
+```
 
-## Learn More
+This runs:
+- `npm run lint`
+- `npm run build`
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment (Vercel)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Import repository in Vercel.
+2. Set **Root Directory** to `frontend`.
+3. Add environment variable:
+   - `NEXT_PUBLIC_API_URL=https://your-backend-domain.com/api`
+4. Build command: `npm run build`
+5. Start command: `npm run start`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`next.config.mjs` is configured with `output: "standalone"` for easier container/non-Vercel deployments too.

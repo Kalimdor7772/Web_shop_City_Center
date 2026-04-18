@@ -19,21 +19,23 @@ const normalizeCartItems = (items = []) => {
     const mergedItems = new Map();
 
     items.forEach((item) => {
-        if (!item?.id) return;
+        const itemId = item?.id !== undefined && item?.id !== null ? String(item.id) : null;
+        if (!itemId) return;
 
         const quantity = Math.max(1, Number(item.quantity) || 1);
-        const existingItem = mergedItems.get(item.id);
+        const existingItem = mergedItems.get(itemId);
 
         if (existingItem) {
-            mergedItems.set(item.id, {
+            mergedItems.set(itemId, {
                 ...existingItem,
                 quantity: existingItem.quantity + quantity,
             });
             return;
         }
 
-        mergedItems.set(item.id, {
+        mergedItems.set(itemId, {
             ...item,
+            id: itemId,
             quantity,
         });
     });

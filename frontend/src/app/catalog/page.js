@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Filter, Minus, Plus, Search, ShoppingCart, Sparkles, Star, X } from "lucide-react";
@@ -36,7 +36,7 @@ function Promo({ item, onPick }) {
     );
 }
 
-export default function CatalogPage() {
+function CatalogPageContent() {
     const searchParams = useSearchParams();
     const { addToCart } = useCart();
     const { showToast } = useToast();
@@ -60,16 +60,9 @@ export default function CatalogPage() {
     }, []);
 
     useEffect(() => {
-        const run = async () => {
-            try {
-                const res = await productService.getProducts({ limit: 100 });
-                if (res.success) setProducts(res.data);
-            } finally {
-                setLoaded(true);
-            }
-        };
-        run();
-    }, []);
+        const cat = searchParams.get("category");
+        if (cat) setCategory(cat);
+    }, [searchParams]);
 
     useEffect(() => {
         const handleFocusSearch = () => {
@@ -91,6 +84,32 @@ export default function CatalogPage() {
 
         return () => window.clearTimeout(timer);
     }, [focusSearchInput, searchParams]);
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const loadProducts = async () => {
+            try {
+                const response = await productService.getProducts({ page: 1, limit: 200 });
+                if (!isMounted) return;
+                setProducts(Array.isArray(response?.data) ? response.data : []);
+            } catch (error) {
+                if (!isMounted) return;
+                showToast(error?.message || "Не удалось загрузить каталог");
+                setProducts([]);
+            } finally {
+                if (isMounted) {
+                    setLoaded(true);
+                }
+            }
+        };
+
+        loadProducts();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [showToast]);
 
     const categories = useMemo(() => [ALL, ...new Set(products.map((p) => p.category).filter(Boolean))], [products]);
     const uniqueBrands = useMemo(() => [...new Set(products.map((p) => p.brand).filter(Boolean))], [products]);
@@ -219,18 +238,18 @@ export default function CatalogPage() {
 
             <section className="organic-section px-3 pb-6 md:px-5">
                 <div className="mx-auto max-w-[1480px]">
-                    <div className="sticky top-20 z-30 mb-5 -mx-3 rounded-[2rem] border border-white/60 bg-[linear-gradient(180deg,rgba(252,248,239,0.94),rgba(248,243,231,0.88))] px-3 py-4 backdrop-blur-xl xl:mx-0">
-                        <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-                        <div className="flex flex-wrap gap-3">
+                    <div className="z-30 mb-5 rounded-[1.6rem] border border-white/60 bg-[linear-gradient(180deg,rgba(252,248,239,0.94),rgba(248,243,231,0.88))] px-3 py-3 backdrop-blur-xl md:sticky md:top-20 md:-mx-3 md:rounded-[2rem] md:px-4 md:py-4 xl:mx-0">
+                        <div className="flex flex-col gap-3 md:gap-4 xl:flex-row xl:items-center xl:justify-between">
+                        <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible md:pb-0">
                             {categories.map((item) => (
-                                <button key={item} onClick={() => pickCategory(item)} className={`rounded-full px-5 py-3 text-sm font-black transition-all ${category === item ? "bg-gray-900 text-white shadow-lg" : "glass-panel text-gray-600 hover:text-gray-900"}`}>
+                                <button key={item} onClick={() => pickCategory(item)} className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 text-xs font-black transition-all sm:px-5 sm:py-3 sm:text-sm ${category === item ? "bg-gray-900 text-white shadow-lg" : "glass-panel text-gray-600 hover:text-gray-900"}`}>
                                     {item}
                                 </button>
                             ))}
                         </div>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible md:pb-0">
                             {[["popular", "Популярные"], ["price-asc", "Сначала дешевле"], ["price-desc", "Сначала дороже"]].map(([id, label]) => (
-                                <button key={id} onClick={() => setSort(id)} className={`rounded-full px-4 py-2.5 text-xs font-black uppercase tracking-[0.18em] transition-all ${sort === id ? "bg-emerald-700 text-white shadow-[0_14px_22px_rgba(31,157,104,0.22)]" : "glass-panel text-stone-500 hover:text-gray-900"}`}>
+                                <button key={id} onClick={() => setSort(id)} className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.14em] transition-all sm:text-xs sm:tracking-[0.18em] ${sort === id ? "bg-emerald-700 text-white shadow-[0_14px_22px_rgba(31,157,104,0.22)]" : "glass-panel text-stone-500 hover:text-gray-900"}`}>
                                     {label}
                                 </button>
                             ))}
@@ -397,5 +416,13 @@ export default function CatalogPage() {
                 )}
             </AnimatePresence>
         </main>
+    );
+}
+
+export default function CatalogPage() {
+    return (
+        <Suspense fallback={<div className="organic-section flex min-h-screen items-center justify-center px-4 pt-24 text-emerald-700">Загрузка...</div>}>
+            <CatalogPageContent />
+        </Suspense>
     );
 }

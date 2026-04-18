@@ -9,5 +9,6 @@ export function formatPrice(price) {
         style: 'decimal',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
-    }).format(Math.round(price)).replace(/\u00A0/g, ' ') + " ₸";
+    }).format(Math.round(price)).replace(/\u00A0/g, ' ') + " \u20B8";
 }
+

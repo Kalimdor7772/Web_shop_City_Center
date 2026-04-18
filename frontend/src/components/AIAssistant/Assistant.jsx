@@ -44,7 +44,7 @@ export default function Assistant() {
         if (!actionValue) return;
 
         if (actionValue.startsWith("navigate:")) {
-            window.location.href = actionValue.split(":")[1];
+            window.location.assign(actionValue.split(":")[1]);
             closeAssistant();
             return;
         }
@@ -104,40 +104,40 @@ export default function Assistant() {
     if (!mounted) return null;
 
     return (
-        <div className="pointer-events-none fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-4">
+        <div className="pointer-events-none fixed bottom-3 right-3 z-[9999] flex flex-col items-end gap-3 sm:bottom-6 sm:right-6 sm:gap-4">
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
                         initial={{ opacity: 0, y: 30, scale: 0.92, filter: "blur(10px)" }}
                         animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                         exit={{ opacity: 0, y: 30, scale: 0.92, filter: "blur(10px)" }}
-                        className="pointer-events-auto flex h-[600px] w-[380px] flex-col overflow-hidden rounded-[2.5rem] border border-white/60 bg-[linear-gradient(180deg,rgba(255,252,245,0.96),rgba(250,244,231,0.94))] shadow-[0_24px_70px_-18px_rgba(74,54,23,0.25)] backdrop-blur-2xl md:w-[420px]"
+                        className="assistant-shell pointer-events-auto flex h-[min(78dvh,600px)] w-[calc(100vw-1.25rem)] max-w-[420px] flex-col overflow-hidden rounded-[1.8rem] border border-white/60 bg-[linear-gradient(180deg,rgba(255,252,245,0.96),rgba(250,244,231,0.94))] shadow-[0_24px_70px_-18px_rgba(74,54,23,0.25)] backdrop-blur-2xl sm:h-[600px] sm:w-[380px] sm:rounded-[2.5rem] md:w-[420px]"
                     >
-                        <div className="flex items-center justify-between border-b border-white/60 bg-[linear-gradient(90deg,rgba(255,255,255,0.76),rgba(249,243,227,0.7))] px-6 py-5">
-                            <div className="flex items-center gap-4">
+                        <div className="assistant-shell__header flex items-center justify-between border-b border-white/60 bg-[linear-gradient(90deg,rgba(255,255,255,0.76),rgba(249,243,227,0.7))] px-4 py-4 sm:px-6 sm:py-5">
+                            <div className="flex items-center gap-3 sm:gap-4">
                                 <div className="relative">
                                     <motion.div
                                         animate={getOrbVariants()}
-                                        className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#147a54_0%,#1f9d68_55%,#f0b53c_140%)] text-white shadow-lg shadow-emerald-200/80"
+                                        className="flex h-10 w-10 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#147a54_0%,#1f9d68_55%,#f0b53c_140%)] text-white shadow-lg shadow-emerald-200/80 sm:h-12 sm:w-12 sm:rounded-2xl"
                                     >
-                                        <Bot size={24} />
+                                        <Bot size={20} className="sm:h-6 sm:w-6" />
                                     </motion.div>
                                     <span className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-white bg-green-500" />
                                 </div>
                                 <div>
-                                    <h3 className="font-black leading-tight tracking-tight text-gray-900">AI помощник</h3>
+                                    <h3 className="text-sm font-black leading-tight tracking-tight text-gray-900 sm:text-base">AI помощник</h3>
                                     <div className="flex items-center gap-1.5">
                                         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
                                         <p className="text-[10px] font-black uppercase tracking-[0.22em] text-stone-400">онлайн</p>
                                     </div>
                                 </div>
                             </div>
-                            <button onClick={closeAssistant} className="glass-panel rounded-2xl p-2 text-gray-400 transition-all hover:bg-white hover:text-gray-900">
-                                <X size={20} />
+                            <button onClick={closeAssistant} className="glass-panel rounded-xl p-2 text-gray-400 transition-all hover:bg-white hover:text-gray-900 sm:rounded-2xl">
+                                <X size={18} className="sm:h-5 sm:w-5" />
                             </button>
                         </div>
 
-                        <div className="scrollbar-hide flex-1 space-y-6 overflow-y-auto px-6 py-6">
+                        <div className="scrollbar-hide flex-1 space-y-4 overflow-y-auto px-4 py-4 sm:space-y-6 sm:px-6 sm:py-6">
                             {messages.map((msg, idx) => (
                                 <motion.div
                                     key={`${msg.role}-${idx}`}
@@ -145,7 +145,7 @@ export default function Assistant() {
                                     animate={{ opacity: 1, x: 0 }}
                                     className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                                 >
-                                    <div className={`max-w-[85%] whitespace-pre-line rounded-[1.5rem] px-5 py-4 text-sm font-bold leading-relaxed ${
+                                    <div className={`max-w-[90%] whitespace-pre-line rounded-[1.2rem] px-4 py-3 text-[13px] font-bold leading-relaxed sm:max-w-[85%] sm:rounded-[1.5rem] sm:px-5 sm:py-4 sm:text-sm ${
                                         msg.role === "user"
                                             ? "rounded-tr-none bg-emerald-700 text-white shadow-[0_16px_28px_rgba(31,157,104,0.22)]"
                                             : "glass-panel rounded-tl-none text-gray-800"
@@ -158,7 +158,7 @@ export default function Assistant() {
                                                     <button
                                                         key={`${action.label}-${i}`}
                                                         onClick={() => void handleAction(action.action || action.label)}
-                                                        className="rounded-lg bg-emerald-700 px-3 py-1.5 text-xs text-white shadow-sm transition-colors hover:bg-emerald-800"
+                                                        className="max-w-full rounded-lg bg-emerald-700 px-3 py-1.5 text-left text-xs text-white shadow-sm transition-colors hover:bg-emerald-800"
                                                     >
                                                         {action.label}
                                                     </button>
@@ -186,7 +186,7 @@ export default function Assistant() {
                                     <p className="px-1 text-[10px] font-black uppercase tracking-[0.22em] text-stone-400">рекомендации</p>
                                     <div className="no-scrollbar -mx-2 flex gap-3 overflow-x-auto px-2 pb-4">
                                         {recommendations.map((product) => (
-                                            <motion.div key={product.id} whileHover={{ y: -5 }} className="glass-panel-strong group flex min-w-[168px] flex-col gap-3 rounded-[2rem] p-3">
+                                            <motion.div key={product.id} whileHover={{ y: -5 }} className="glass-panel-strong group flex min-w-[148px] flex-col gap-3 rounded-[1.6rem] p-3 sm:min-w-[168px] sm:rounded-[2rem]">
                                                 <div className="relative aspect-square overflow-hidden rounded-[1.5rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(244,238,223,0.86))] p-3">
                                                     <img src={product.image} alt="" className="h-full w-full object-contain transition-transform group-hover:scale-110" />
                                                 </div>
@@ -210,13 +210,13 @@ export default function Assistant() {
                             <div ref={messagesEndRef} />
                         </div>
 
-                        <div className="space-y-4 p-6 pt-0">
-                            <div className="no-scrollbar flex gap-2 overflow-x-auto py-2">
+                        <div className="space-y-3 p-4 pt-0 sm:space-y-4 sm:p-6 sm:pt-0">
+                            <div className="no-scrollbar flex gap-2 overflow-x-auto py-1 sm:py-2">
                                 {quickActions.map((action) => (
                                     <button
                                         key={action.label}
                                         onClick={() => handleQuickAction(action.prompt)}
-                                        className="glass-panel flex whitespace-nowrap rounded-full px-4 py-2 text-xs font-bold text-gray-600 transition-all hover:border-emerald-400 hover:bg-emerald-50/70 hover:text-emerald-700"
+                                        className="glass-panel flex shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-[11px] font-bold text-gray-600 transition-all hover:border-emerald-400 hover:bg-emerald-50/70 hover:text-emerald-700 sm:px-4 sm:text-xs"
                                     >
                                         <span className="mr-2"><action.icon size={14} /></span>
                                         {action.label}
@@ -224,21 +224,21 @@ export default function Assistant() {
                                 ))}
                             </div>
 
-                            <form onSubmit={handleSubmit} className="relative flex items-center gap-3">
+                            <form onSubmit={handleSubmit} className="relative flex items-center gap-2 sm:gap-3">
                                 <input
                                     type="text"
                                     value={inputValue}
                                     onChange={(event) => setInputValue(event.target.value)}
-                                    placeholder="Спросите про подборку на неделю, бюджет, КБЖУ или конкретные товары..."
-                                    className="flex-1 rounded-[1.5rem] bg-white/80 px-6 py-4 text-sm font-bold text-gray-900 outline-none transition-all placeholder:text-stone-400 focus:ring-2 focus:ring-emerald-500/20"
+                                    placeholder="Спросите про подборку, бюджет или конкретные товары..."
+                                    className="min-w-0 flex-1 rounded-[1.1rem] bg-white/80 px-4 py-3 text-sm font-bold text-gray-900 outline-none transition-all placeholder:text-stone-400 focus:ring-2 focus:ring-emerald-500/20 sm:rounded-[1.5rem] sm:px-6 sm:py-4"
                                     disabled={isThinking}
                                 />
                                 <button
                                     type="submit"
                                     disabled={!inputValue.trim() || isThinking}
-                                    className="rounded-2xl bg-emerald-700 p-4 text-white shadow-lg shadow-emerald-200 transition-all hover:bg-emerald-800 disabled:opacity-50 disabled:shadow-none"
+                                    className="rounded-[1rem] bg-emerald-700 p-3.5 text-white shadow-lg shadow-emerald-200 transition-all hover:bg-emerald-800 disabled:opacity-50 disabled:shadow-none sm:rounded-2xl sm:p-4"
                                 >
-                                    <Send size={20} />
+                                    <Send size={18} className="sm:h-5 sm:w-5" />
                                 </button>
                             </form>
                         </div>
@@ -249,8 +249,8 @@ export default function Assistant() {
             {!isOpen && (
                 <motion.button onClick={openAssistant} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="group relative pointer-events-auto">
                     <div className="absolute inset-0 rounded-full bg-[linear-gradient(135deg,#147a54_0%,#1f9d68_55%,#f0b53c_140%)] opacity-35 blur-xl transition-opacity group-hover:opacity-50" />
-                    <div className="relative flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/25 bg-[linear-gradient(135deg,#147a54_0%,#1f9d68_55%,#f0b53c_140%)] text-white shadow-2xl">
-                        <Sparkles size={28} className="transition-transform group-hover:rotate-12" />
+                    <div className="relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-white/25 bg-[linear-gradient(135deg,#147a54_0%,#1f9d68_55%,#f0b53c_140%)] text-white shadow-2xl sm:h-16 sm:w-16">
+                        <Sparkles size={24} className="transition-transform group-hover:rotate-12 sm:h-7 sm:w-7" />
                         {emotion !== "idle" && <span className="absolute -right-1 -top-1 h-5 w-5 rounded-full border-4 border-white bg-red-500" />}
                     </div>
                 </motion.button>

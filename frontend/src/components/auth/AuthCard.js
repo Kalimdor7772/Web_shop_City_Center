@@ -18,7 +18,7 @@ const FloatingInput = ({ label, id, type, value, onChange, disabled, error, icon
                 onChange={onChange}
                 disabled={disabled}
                 placeholder=" "
-                className={`block w-full px-4 pt-5 pb-2 text-gray-900 bg-white/40 border rounded-2xl appearance-none focus:outline-none focus:ring-4 transition-all duration-300 backdrop-blur-md peer ${error
+                className={`peer block w-full appearance-none rounded-xl border bg-white/40 px-4 pb-2 pt-5 text-sm text-gray-900 backdrop-blur-md transition-all duration-300 focus:outline-none focus:ring-4 sm:rounded-2xl sm:text-base ${error
                     ? 'border-red-500/50 focus:ring-red-500/10 focus:border-red-500'
                     : 'border-white/50 focus:ring-green-500/10 focus:border-green-500 hover:border-white/80'
                     } ${Icon ? 'pl-11' : ''}`}
@@ -29,7 +29,7 @@ const FloatingInput = ({ label, id, type, value, onChange, disabled, error, icon
             )}
             <label
                 htmlFor={id}
-                className={`absolute text-sm duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 font-bold tracking-wide pointer-events-none transition-all ${error ? 'text-red-500' : 'text-gray-400 peer-focus:text-green-600'
+                className={`pointer-events-none absolute left-4 top-4 z-10 origin-[0] -translate-y-4 scale-75 transform text-xs font-bold tracking-wide transition-all duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-4 peer-focus:scale-75 sm:text-sm ${error ? 'text-red-500' : 'text-gray-400 peer-focus:text-green-600'
                     } ${Icon ? 'peer-placeholder-shown:left-11' : ''}`}
             >
                 {label}
@@ -54,6 +54,7 @@ const FloatingInput = ({ label, id, type, value, onChange, disabled, error, icon
 const AuthCard = ({ initialView = "login" }) => {
     const [view, setView] = useState(initialView);
     const [isLoading, setIsLoading] = useState(false);
+    const [canTilt, setCanTilt] = useState(false);
     const router = useRouter();
     const cardRef = useRef(null);
 
@@ -66,6 +67,7 @@ const AuthCard = ({ initialView = "login" }) => {
     const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-7deg", "7deg"]);
 
     const handleMouseMove = (e) => {
+        if (!canTilt) return;
         if (!cardRef.current) return;
         const rect = cardRef.current.getBoundingClientRect();
         const width = rect.width;
@@ -82,6 +84,17 @@ const AuthCard = ({ initialView = "login" }) => {
         x.set(0);
         y.set(0);
     };
+
+    useEffect(() => {
+        if (typeof window === "undefined") return undefined;
+
+        const mediaQuery = window.matchMedia("(pointer: fine) and (min-width: 1024px)");
+        const syncTilt = () => setCanTilt(mediaQuery.matches);
+        syncTilt();
+        mediaQuery.addEventListener("change", syncTilt);
+
+        return () => mediaQuery.removeEventListener("change", syncTilt);
+    }, []);
 
     // Login Form State
     const [loginData, setLoginData] = useState({
@@ -171,43 +184,43 @@ const AuthCard = ({ initialView = "login" }) => {
 
     return (
         <div
-            className="w-full max-w-[440px] perspective-2000"
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
+            className={`w-full max-w-[520px] ${canTilt ? "perspective-2000" : ""}`}
+            onMouseMove={canTilt ? handleMouseMove : undefined}
+            onMouseLeave={canTilt ? handleMouseLeave : undefined}
         >
             <motion.div
                 ref={cardRef}
                 style={{
-                    rotateX,
-                    rotateY,
-                    transformStyle: "preserve-3d"
+                    rotateX: canTilt ? rotateX : "0deg",
+                    rotateY: canTilt ? rotateY : "0deg",
+                    transformStyle: canTilt ? "preserve-3d" : "flat"
                 }}
-                className="relative bg-white/40 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] overflow-hidden border border-white/60 p-10"
+                className="relative overflow-hidden rounded-[2rem] border border-white/60 bg-white/40 p-5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] backdrop-blur-2xl sm:rounded-[2.5rem] sm:p-8 lg:p-10"
             >
                 {/* Visual Flair */}
                 <div className="absolute -top-12 -right-12 w-48 h-48 bg-green-500/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
                 <div style={{ transform: "translateZ(50px)" }}>
-                    <div className="text-center mb-10">
+                    <div className="mb-8 text-center sm:mb-10">
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-2xl shadow-green-500/30 mb-6 rotate-3"
+                            className="mb-5 inline-flex h-16 w-16 rotate-3 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 text-white shadow-2xl shadow-green-500/30 sm:mb-6 sm:h-20 sm:w-20 sm:rounded-3xl"
                         >
-                            <Sparkles className="w-10 h-10" />
+                            <Sparkles className="h-8 w-8 sm:h-10 sm:w-10" />
                         </motion.div>
-                        <h2 className="text-4xl font-heading font-black text-gray-900 mb-2 tracking-tight">
+                        <h2 className="mb-2 text-3xl font-heading font-black tracking-tight text-gray-900 sm:text-4xl">
                             {view === "login" ? t.auth.welcome : t.auth.signUp}
                         </h2>
-                        <p className="text-gray-500 font-medium">
+                        <p className="text-sm font-medium text-gray-500 sm:text-base">
                             {view === "login"
                                 ? t.auth.experienceFuture
                                 : t.auth.startJourney}
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                         <AnimatePresence mode="wait">
                             {view === "login" ? (
                                 <motion.div
@@ -256,7 +269,7 @@ const AuthCard = ({ initialView = "login" }) => {
                                         error={errors.email}
                                         icon={Mail}
                                     />
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                         <FloatingInput
                                             id="firstName"
                                             label={t.auth.firstNameLabel}
@@ -315,7 +328,7 @@ const AuthCard = ({ initialView = "login" }) => {
                             disabled={!canSubmit()}
                             whileHover={canSubmit() ? { scale: 1.02, translateY: -2 } : {}}
                             whileTap={canSubmit() ? { scale: 0.98 } : {}}
-                            className={`w-full py-5 rounded-[1.25rem] font-black text-lg tracking-tight shadow-2xl transition-all flex items-center justify-center gap-3 relative overflow-hidden group ${canSubmit()
+                            className={`group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-[1rem] py-4 text-base font-black tracking-tight shadow-2xl transition-all sm:rounded-[1.25rem] sm:py-5 sm:text-lg ${canSubmit()
                                 ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-green-500/40'
                                 : 'bg-gray-100 text-gray-400 grayscale cursor-not-allowed shadow-none'
                                 }`}
@@ -332,13 +345,13 @@ const AuthCard = ({ initialView = "login" }) => {
                         </motion.button>
                     </form>
 
-                    <div className="mt-8 text-center">
+                    <div className="mt-6 text-center sm:mt-8">
                         <button
                             onClick={() => {
                                 setView(view === "login" ? "register" : "login");
                                 setErrors({});
                             }}
-                            className="text-gray-500 hover:text-green-600 transition-colors font-bold text-sm"
+                            className="text-sm font-bold text-gray-500 transition-colors hover:text-green-600"
                         >
                             {view === "login" ? t.auth.noAccount + " " + t.auth.createAccount : t.auth.haveAccount + " " + t.auth.signIn}
                         </button>

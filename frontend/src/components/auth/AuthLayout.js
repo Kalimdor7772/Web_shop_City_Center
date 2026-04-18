@@ -9,7 +9,7 @@ import { t } from "@/lib/i18n";
 
 const FloatingElement = ({ className, delay }) => (
     <motion.div
-        className={`absolute rounded-full blur-3xl opacity-40 mix-blend-multiply ${className}`}
+        className={`auth-layout__orb absolute rounded-full blur-3xl opacity-40 mix-blend-multiply ${className}`}
         animate={{
             y: [0, -40, 0],
             x: [0, 20, 0],
@@ -26,7 +26,7 @@ const FloatingElement = ({ className, delay }) => (
 
 const AuthLayout = ({ initialView }) => {
     return (
-        <div className="min-h-screen w-full flex bg-slate-50 overflow-hidden relative">
+        <div className="auth-layout relative min-h-[100dvh] w-full overflow-hidden bg-slate-50 xl:flex">
             {/* Background elements visible on both mobile/desktop but subtle */}
             <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
                 <FloatingElement className="bg-green-300 w-96 h-96 -top-20 -left-20" delay={0} />
@@ -34,16 +34,16 @@ const AuthLayout = ({ initialView }) => {
                 <FloatingElement className="bg-yellow-200 w-80 h-80 bottom-0 left-1/4" delay={4} />
             </div>
 
-            {/* Left Side - Visual & Branding (Hidden on mobile) */}
-            <div className="hidden lg:flex w-1/2 relative items-center justify-center z-10 p-12">
+            {/* Left Side - Visual & Branding (Desktop/Large Tablet) */}
+            <div className="relative z-10 hidden w-[52%] items-center justify-center p-8 xl:flex 2xl:p-12">
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="max-w-xl relative"
+                    className="relative max-w-xl"
                 >
                     {/* Glass Decor Background */}
-                    <div className="absolute -inset-10 bg-white/30 backdrop-blur-2xl rounded-[3rem] -z-10 shadow-2xl border border-white/40" />
+                    <div className="auth-layout__promo-glass absolute -inset-10 bg-white/30 backdrop-blur-2xl rounded-[3rem] -z-10 shadow-2xl border border-white/40" />
 
                     <div className="mb-8 flex items-center gap-3">
                         <div className="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-6">
@@ -54,11 +54,11 @@ const AuthLayout = ({ initialView }) => {
                         </span>
                     </div>
 
-                    <h1 className="text-6xl font-extrabold font-heading text-gray-900 mb-8 leading-[1.1]">
+                    <h1 className="mb-8 text-5xl font-extrabold font-heading leading-[1.08] text-gray-900 2xl:text-6xl">
                         {t.auth.layout.title} <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-500">Future</span> {t.auth.layout.subtitle}
                     </h1>
-                    <p className="text-xl text-gray-600 leading-relaxed font-medium">
+                    <p className="text-lg font-medium leading-relaxed text-gray-600 2xl:text-xl">
                         {t.auth.layout.desc}
                     </p>
 
@@ -74,25 +74,25 @@ const AuthLayout = ({ initialView }) => {
             </div>
 
             {/* Right Side - Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-12 relative z-20 overflow-y-auto">
+            <div className="relative z-20 flex w-full items-start justify-center overflow-y-auto px-4 pb-10 pt-24 sm:px-6 sm:pt-24 md:px-10 md:pt-28 lg:px-12 xl:min-h-[100dvh] xl:w-[48%] xl:items-center xl:pb-12 xl:pt-10">
                 {/* Mobile Header / Back Link */}
-                <div className="absolute top-6 left-6 z-30">
+                <div className="absolute left-4 top-5 z-30 sm:left-6 sm:top-6">
                     <Link
                         href="/"
-                        className="flex items-center gap-2 text-gray-500 hover:text-green-600 transition-colors group px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-gray-100 shadow-sm"
+                        className="flex items-center gap-2 rounded-full border border-gray-100 bg-white/80 px-3.5 py-2 text-gray-500 shadow-sm backdrop-blur-sm transition-colors group hover:text-green-600 sm:px-4"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                         <span className="text-sm font-bold">{t.auth.back}</span>
                     </Link>
                 </div>
 
-                <div className="w-full max-w-[440px] my-auto">
+                <div className="my-auto w-full max-w-[520px]">
                     {/* Mobile Branding */}
-                    <div className="lg:hidden flex flex-col items-center mb-8">
+                    <div className="mb-7 flex flex-col items-center lg:hidden">
                         <div className="w-12 h-12 bg-green-600 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3 mb-4">
                             <ShoppingBag className="w-6 h-6 text-white" />
                         </div>
-                        <h2 className="text-2xl font-bold font-heading text-gray-900">
+                        <h2 className="text-center text-2xl font-bold font-heading text-gray-900 sm:text-3xl">
                             {t.auth.welcome}
                         </h2>
                     </div>
@@ -100,7 +100,7 @@ const AuthLayout = ({ initialView }) => {
                     <AuthCard initialView={initialView} />
 
                     {/* Footer Links */}
-                    <div className="mt-8 text-center pb-8 lg:pb-0">
+                    <div className="mt-6 pb-6 text-center sm:mt-8 lg:pb-0">
                         <p className="text-xs text-gray-400 font-medium">
                             {t.auth.terms} <span className="underline cursor-pointer hover:text-gray-600">{t.auth.termsLink}</span>.
                         </p>

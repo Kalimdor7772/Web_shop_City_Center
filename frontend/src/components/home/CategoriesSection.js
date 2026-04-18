@@ -7,14 +7,14 @@ import { Apple, Beef, Carrot, Coffee, Croissant, Fish, IceCream, Milk } from "lu
 import { t } from "@/lib/i18n";
 
 const categories = [
-    { id: 1, name: t.home.cat.produce, icon: <Apple />, accent: "from-emerald-200/70 to-lime-100", textColor: "text-emerald-800", href: "/catalog/vegetables" },
-    { id: 2, name: t.home.cat.bakery, icon: <Croissant />, accent: "from-amber-200/80 to-orange-100", textColor: "text-amber-800", href: "/catalog/bakery" },
-    { id: 3, name: t.home.cat.dairy, icon: <Milk />, accent: "from-sky-200/80 to-cyan-100", textColor: "text-sky-800", href: "/catalog/dairy" },
-    { id: 4, name: t.home.cat.meat, icon: <Beef />, accent: "from-rose-200/80 to-orange-100", textColor: "text-rose-800", href: "/catalog/meat" },
-    { id: 5, name: t.home.cat.seafood, icon: <Fish />, accent: "from-indigo-200/80 to-sky-100", textColor: "text-indigo-800", href: "/catalog/fish" },
-    { id: 6, name: t.home.cat.grocery, icon: <Carrot />, accent: "from-orange-200/80 to-yellow-100", textColor: "text-orange-800", href: "/catalog/grocery" },
-    { id: 7, name: t.home.cat.coffee, icon: <Coffee />, accent: "from-stone-200/80 to-amber-100", textColor: "text-stone-800", href: "/catalog/coffee" },
-    { id: 8, name: t.home.cat.sweets, icon: <IceCream />, accent: "from-pink-200/80 to-rose-100", textColor: "text-pink-800", href: "/catalog/sweets" },
+    { id: 1, name: t.home.cat.produce, icon: <Apple />, accent: "from-emerald-200/70 to-lime-100", textColor: "text-emerald-800", href: "/catalog?category=Овощи и фрукты" },
+    { id: 2, name: t.home.cat.bakery, icon: <Croissant />, accent: "from-amber-200/80 to-orange-100", textColor: "text-amber-800", href: "/catalog?category=Выпечка" },
+    { id: 3, name: t.home.cat.dairy, icon: <Milk />, accent: "from-sky-200/80 to-cyan-100", textColor: "text-sky-800", href: "/catalog?category=Молочные продукты" },
+    { id: 4, name: t.home.cat.meat, icon: <Beef />, accent: "from-rose-200/80 to-orange-100", textColor: "text-rose-800", href: "/catalog?category=Мясо и рыба" },
+    { id: 5, name: t.home.cat.seafood, icon: <Fish />, accent: "from-indigo-200/80 to-sky-100", textColor: "text-indigo-800", href: "/catalog?category=Мясо и рыба" },
+    { id: 6, name: t.home.cat.grocery, icon: <Carrot />, accent: "from-orange-200/80 to-yellow-100", textColor: "text-orange-800", href: "/catalog?category=Бакалея" },
+    { id: 7, name: t.home.cat.coffee, icon: <Coffee />, accent: "from-stone-200/80 to-amber-100", textColor: "text-stone-800", href: "/catalog?category=Напитки" },
+    { id: 8, name: t.home.cat.sweets, icon: <IceCream />, accent: "from-pink-200/80 to-rose-100", textColor: "text-pink-800", href: "/catalog?category=Кондитерские изделия" },
 ];
 
 export default function CategoriesSection() {

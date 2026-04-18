@@ -61,7 +61,7 @@ export default function AIPage() {
                             className="glass-panel mb-8 inline-flex items-center gap-3 rounded-full px-5 py-3 text-sm font-black uppercase tracking-[0.22em] text-emerald-800"
                         >
                             <Sparkles size={16} className="text-amber-500" />
-                            <span>Умный shopping flow</span>
+                            <span>{t.ai_info.overview.badge}</span>
                         </motion.div>
 
                         <motion.h1
@@ -104,11 +104,7 @@ export default function AIPage() {
                         </motion.div>
 
                         <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
-                            {[
-                                { label: "24/7", value: "AI online" },
-                                { label: "Fast", value: "Answers in seconds" },
-                                { label: "Smart", value: "Knows your basket" },
-                            ].map((item) => (
+                            {t.ai_info.stats.map((item) => (
                                 <div key={item.label} className="glass-panel rounded-[1.75rem] px-5 py-4 text-left">
                                     <p className="text-xs font-bold uppercase tracking-[0.22em] text-stone-500">{item.label}</p>
                                     <p className="mt-2 text-lg font-black text-gray-900">{item.value}</p>
@@ -124,10 +120,10 @@ export default function AIPage() {
                     <div className="mb-10 flex items-end justify-between gap-6">
                         <div>
                             <h2 className="font-heading text-4xl font-black tracking-[-0.04em] text-gray-900 md:text-5xl">
-                                Что умеет AI
+                                {t.ai_info.overview.title}
                             </h2>
                             <p className="mt-3 max-w-2xl text-lg font-medium text-stone-600">
-                                Помогает собирать корзину быстрее, подсказывает выгодные товары и убирает рутину из покупок.
+                                {t.ai_info.overview.description}
                             </p>
                         </div>
                     </div>
@@ -208,18 +204,14 @@ export default function AIPage() {
                             </div>
 
                             <div>
-                                <p className="text-sm font-bold uppercase tracking-[0.24em] text-stone-500">AI Basket Copilot</p>
+                                <p className="text-sm font-bold uppercase tracking-[0.24em] text-stone-500">{t.ai_info.card.status}</p>
                                 <h3 className="mt-3 text-3xl font-black leading-tight text-gray-900">
-                                    Подскажет, что купить, чем заменить и где сэкономить
+                                    {t.ai_info.card.title}
                                 </h3>
                             </div>
 
                             <div className="space-y-3">
-                                {[
-                                    "Собирает корзину под бюджет",
-                                    "Предлагает продукты по запросу",
-                                    "Подсказывает акции и идеи блюд",
-                                ].map((item) => (
+                                {t.ai_info.card.bullets.map((item) => (
                                     <div key={item} className="glass-panel flex items-center gap-3 rounded-[1.25rem] px-4 py-3 text-sm font-bold text-gray-900">
                                         <Sparkles size={16} className="text-amber-500" />
                                         <span>{item}</span>

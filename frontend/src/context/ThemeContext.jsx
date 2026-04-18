@@ -24,15 +24,17 @@ function resolveTheme(theme) {
 }
 
 export function ThemeProvider({ children }) {
-    const [theme, setTheme] = useState("system");
+    const [theme, setTheme] = useState(() => {
+        if (typeof window === "undefined") return "system";
+        return localStorage.getItem(STORAGE_KEY) || "system";
+    });
     const [resolvedTheme, setResolvedTheme] = useState("light");
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
-        if (typeof window === "undefined") return;
-        const savedTheme = localStorage.getItem(STORAGE_KEY) || "system";
-        setTheme(savedTheme);
+        if (typeof window === "undefined") return undefined;
         setMounted(true);
+        return undefined;
     }, []);
 
     useEffect(() => {

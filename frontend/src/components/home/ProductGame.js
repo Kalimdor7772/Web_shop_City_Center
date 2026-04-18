@@ -2,12 +2,13 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { t } from "@/lib/i18n";
 
 const products = [
-    { name: "Яблоко", emoji: "\uD83C\uDF4E", bg: "bg-red-100", color: "text-red-600" },
-    { name: "Банан", emoji: "\uD83C\uDF4C", bg: "bg-yellow-100", color: "text-yellow-700" },
-    { name: "Апельсин", emoji: "\uD83C\uDF4A", bg: "bg-orange-100", color: "text-orange-600" },
-    { name: "Вишня", emoji: "\uD83C\uDF52", bg: "bg-pink-100", color: "text-pink-600" },
+    { key: "apple", emoji: "\uD83C\uDF4E", bg: "bg-red-100", color: "text-red-600" },
+    { key: "banana", emoji: "\uD83C\uDF4C", bg: "bg-yellow-100", color: "text-yellow-700" },
+    { key: "orange", emoji: "\uD83C\uDF4A", bg: "bg-orange-100", color: "text-orange-600" },
+    { key: "cherry", emoji: "\uD83C\uDF52", bg: "bg-pink-100", color: "text-pink-600" },
 ];
 
 const createItem = (id) => {
@@ -82,13 +83,13 @@ export default function ProductGame() {
                 <div className="mb-10 flex flex-col items-center justify-between gap-8 lg:flex-row">
                     <div className="max-w-xl">
                         <span className="mb-4 inline-flex items-center justify-center rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">
-                            Игра по тематике магазина
+                            {t.home.game.badge}
                         </span>
                         <h2 className="font-heading text-4xl font-black text-gray-900 md:text-5xl">
-                            Поймай продукты в корзину
+                            {t.home.game.title}
                         </h2>
                         <p className="mt-4 text-lg leading-relaxed text-stone-600">
-                            Чем больше поймаешь свежих фруктов и овощей, тем выше счет. Веди корзину мышью и лови падающие продукты в игровом поле.
+                            {t.home.game.description}
                         </p>
                     </div>
 
@@ -97,13 +98,13 @@ export default function ProductGame() {
                             onClick={handleReset}
                             className="rounded-3xl bg-emerald-700 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-700/20 transition hover:bg-emerald-800"
                         >
-                            Сбросить
+                            {t.home.game.reset}
                         </button>
                         <button
                             onClick={() => setIsPlaying((prev) => !prev)}
                             className="glass-panel rounded-3xl px-6 py-3 font-semibold text-gray-900 transition"
                         >
-                            {isPlaying ? "Пауза" : "Продолжить"}
+                            {isPlaying ? t.home.game.pause : t.home.game.resume}
                         </button>
                     </div>
                 </div>
@@ -135,7 +136,7 @@ export default function ProductGame() {
                                 className="absolute bottom-6 left-1/2 flex h-24 w-48 items-center justify-center rounded-full border-4 border-white bg-emerald-500/95 text-lg font-bold text-white shadow-2xl shadow-emerald-900/30"
                                 style={{ transform: `translateX(calc(${basketX}% - 50%))` }}
                             >
-                                {"\uD83E\uDDFA"} Корзина
+                        <span>{"\uD83E\uDDFA"} {t.home.game.basket}</span>
                             </div>
                         </div>
                     </div>
@@ -144,27 +145,27 @@ export default function ProductGame() {
                         <div className="glass-panel-strong rounded-[2rem] p-6">
                             <div className="mb-4 flex items-center justify-between gap-4">
                                 <div>
-                                    <p className="text-sm uppercase tracking-[0.24em] text-stone-400">Счет</p>
+                                    <p className="text-sm uppercase tracking-[0.24em] text-stone-400">{t.home.game.scoreLabel}</p>
                                     <p className="text-5xl font-bold text-gray-900">{score}</p>
                                 </div>
                                 <div className="rounded-3xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white">
-                                    {isPlaying ? "Игра идет" : "Пауза"}
+                                    {isPlaying ? t.home.game.playing : t.home.game.paused}
                                 </div>
                             </div>
                             <p className="leading-relaxed text-stone-600">
-                                Смотрите на падающие продукты и ведите корзину туда, где они упадут. Каждый пойманный фрукт добавляет очки.
+                                {t.home.game.info}
                             </p>
                         </div>
 
                         <div className="rounded-[2rem] bg-[linear-gradient(135deg,#1c2f28_0%,#0d211b_100%)] p-6 text-white shadow-xl">
-                            <h3 className="mb-4 text-2xl font-semibold">Продукты</h3>
+                            <h3 className="mb-4 text-2xl font-semibold">{t.home.game.productsTitle}</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 {products.map((product) => (
-                                    <div key={product.name} className="flex items-center gap-4 rounded-3xl bg-white/10 p-4">
+                                    <div key={product.key} className="flex items-center gap-4 rounded-3xl bg-white/10 p-4">
                                         <div className={`flex h-12 w-12 items-center justify-center rounded-2xl text-2xl ${product.bg}`}>{product.emoji}</div>
                                         <div>
-                                            <p className="font-semibold">{product.name}</p>
-                                            <p className="text-sm text-slate-300">Лови быстро!</p>
+                                            <p className="font-semibold">{t.home.game.products[product.key]}</p>
+                                            <p className="text-sm text-slate-300">{t.home.game.catchFast}</p>
                                         </div>
                                     </div>
                                 ))}
@@ -172,11 +173,11 @@ export default function ProductGame() {
                         </div>
 
                         <div className="glass-panel-strong rounded-[2rem] p-6">
-                            <p className="mb-2 font-semibold text-gray-900">Как играть</p>
+                            <p className="mb-2 font-semibold text-gray-900">{t.home.game.howToPlay.title}</p>
                             <ul className="list-disc list-inside space-y-2 text-stone-600">
-                                <li>Ведите корзину мышью по игровому полю.</li>
-                                <li>Поймайте максимум фруктов и овощей.</li>
-                                <li>Не пропускайте продукты, чтобы увеличивать счет за каждую удачную ловлю.</li>
+                                <li>{t.home.game.howToPlay.step1}</li>
+                                <li>{t.home.game.howToPlay.step2}</li>
+                                <li>{t.home.game.howToPlay.step3}</li>
                             </ul>
                         </div>
                     </div>

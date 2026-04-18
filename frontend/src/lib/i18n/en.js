@@ -1,6 +1,8 @@
 export const en = {
     common: {
         addToCart: "Add to cart",
+        addedToCart: "Product added to cart",
+        unknownWeight: "Weight upon request",
         buyNow: "Buy now",
         checkout: "Checkout",
         cancel: "Cancel",
@@ -107,6 +109,33 @@ export const en = {
             grocery: "Grocery",
             coffee: "Coffee",
             sweets: "Sweets"
+        },
+        game: {
+            badge: "Store-themed game",
+            title: "Catch products in the basket",
+            description: "The more fresh fruits and vegetables you catch, the higher your score. Move the basket with your mouse and catch falling items.",
+            reset: "Reset",
+            pause: "Pause",
+            resume: "Resume",
+            scoreLabel: "Score",
+            playing: "Game on",
+            paused: "Paused",
+            info: "Watch the falling products and move the basket where they will land. Every caught fruit adds points.",
+            productsTitle: "Products",
+            catchFast: "Catch fast!",
+            basket: "Basket",
+            howToPlay: {
+                title: "How to play",
+                step1: "Move the basket with your mouse across the game field.",
+                step2: "Catch as many fruits and veggies as possible.",
+                step3: "Don’t miss products to increase your score with every successful catch."
+            },
+            products: {
+                apple: "Apple",
+                banana: "Banana",
+                orange: "Orange",
+                cherry: "Cherry"
+            }
         }
     },
     cart: {
@@ -289,14 +318,80 @@ export const en = {
             title: "Terms of Use"
         },
         deals: {
-            title: "Deals & Offers"
+            hotDealsLabel: "Hot deals",
+            sectionTag: "Special picks",
+            title: "Deals & Offers",
+            subtitle: "The best weekly prices, bundles, and sets that are perfect to add to your cart.",
+            hotDealsSectionTitle: "Hot deals",
+            bannerHotLabel: "Flash sale",
+            bannerHotTitle: "Fresh meat\nwith 20% off",
+            bannerHotDescription: "A curated selection of meat and seafood deals at reduced prices this week.",
+            bannerHotCta: "Go to catalog",
+            bundle: {
+                label: "Value bundle",
+                title: "Breakfast\nfor champions",
+                description: "Dairy and bakery in one bundle at a better price."
+            },
+            popularSectionTitle: "Popular with discounts",
+            hitBadge: "Hit",
+            final: {
+                title: "Ready to fill your fridge?",
+                subtitle: "Go to the catalog and build a basket of promotional products in minutes.",
+                cta: "Go to catalog"
+            }
         }
     },
     ai_info: {
-        title: "Your personal AI shopping assistant",
-        subtitle: "Forget endless searching. Our AI will build your grocery list, find recipes and suggest the best deals.",
-        howTitle: "How it works",
-        readyTitle: "Ready for a new experience?",
-        readySubtitle: "Try the most advanced shopping today."
+        hero: {
+            title: "Your personal AI shopping assistant",
+            subtitle: "Forget endless searching. Our AI will build your grocery list, find recipes and suggest the best deals.",
+            cta: "Open AI assistant"
+        },
+        features: {
+            selection: "Product selection",
+            selectionDesc: "Helps you choose the best items based on your preferences and diet.",
+            recommendations: "Smart recommendations",
+            recommendationsDesc: "Suggests complementary products and ingredients for your meals.",
+            saving: "Time saving",
+            savingDesc: "Finds the right categories and brands instantly.",
+            fast: "Fast shopping",
+            fastDesc: "Add products to your cart directly from the assistant dialogue."
+        },
+        overview: {
+            badge: "Smart shopping flow",
+            title: "What AI can do",
+            description: "Helps you build your basket faster, suggests great products, and removes shopping routine."
+        },
+        stats: [
+            { label: "24/7", value: "AI online" },
+            { label: "Fast", value: "Answers in seconds" },
+            { label: "Smart", value: "Knows your basket" }
+        ],
+        card: {
+            status: "Ready",
+            title: "AI Basket Copilot",
+            bullets: [
+                "Builds a basket based on your budget",
+                "Suggests products on request",
+                "Shows deals and recipe ideas"
+            ]
+        }
+        ,
+        dialogs: {
+            title: "How it works",
+            example1: {
+                q: "Recommend ingredients for carbonara pasta",
+                a: "For a classic carbonara, you'll need spaghetti, bacon or pancetta, eggs, parmesan, and black pepper. We currently have a great deal on Barilla spaghetti!"
+            },
+            example2: {
+                q: "I have a lactose allergy, what do you suggest?",
+                a: "Of course! We have a great selection of lactose-free milk, vegan cheeses, and plant-based yogurts. Want to take a look?"
+            }
+        },
+        cta: {
+            title: "Ready for a new experience?",
+            subtitle: "Try the most advanced shopping today.",
+            goCatalog: "Go to catalog"
+        }
     }
 };
