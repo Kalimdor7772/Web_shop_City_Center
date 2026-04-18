@@ -34,6 +34,10 @@ export default function Assistant() {
     };
 
     const handleQuickAction = (action) => sendMessage(action);
+    const isInternalAction = (value = "") =>
+        value.startsWith("navigate:") ||
+        value.startsWith("add_to_cart:") ||
+        value.startsWith("add_multiple_to_cart:");
 
     const handleAddToCart = (product) => {
         addToCart(product);
@@ -71,6 +75,57 @@ export default function Assistant() {
             showToast("Не удалось добавить товар в корзину. Попробуйте другой вариант.");
             return;
         }
+
+        if (actionValue.startsWith("add_multiple_to_cart:")) {
+            const rawIds = actionValue.split(":")[1] || "";
+            const productIds = rawIds.split(",").map((id) => id.trim()).filter(Boolean);
+
+            if (productIds.length === 0) {
+                showToast("Не удалось обработать список товаров для корзины.");
+                return;
+            }
+
+            const quantityById = productIds.reduce((acc, id) => {
+                acc[id] = (acc[id] || 0) + 1;
+                return acc;
+            }, {});
+
+            const products = await Promise.all(
+                Object.keys(quantityById).map(async (productId) => {
+                    let product = recommendations.find((item) => String(item.id) === String(productId));
+
+                    if (!product) {
+                        try {
+                            const result = await getProductById(productId);
+                            product = result?.data || result;
+                        } catch (error) {
+                            console.error("Failed to fetch product for add_multiple_to_cart action:", error);
+                        }
+                    }
+
+                    if (!product) return null;
+                    return { product, quantity: quantityById[productId] };
+                })
+            );
+
+            const validProducts = products.filter(Boolean);
+            if (validProducts.length === 0) {
+                showToast("Не удалось добавить товары в корзину. Попробуйте еще раз.");
+                return;
+            }
+
+            validProducts.forEach(({ product, quantity }) => {
+                for (let i = 0; i < quantity; i += 1) {
+                    addToCart(product, { silentAI: true });
+                }
+            });
+
+            const totalAdded = validProducts.reduce((sum, item) => sum + item.quantity, 0);
+            showToast(`Добавлено в корзину: ${totalAdded} товар(а)`, { label: "В корзину", href: "/cart" });
+            return;
+        }
+
+        if (isInternalAction(actionValue)) return;
 
         handleQuickAction(actionValue);
     };

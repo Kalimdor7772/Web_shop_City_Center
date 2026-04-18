@@ -1,18 +1,13 @@
-const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-const baseUrl = rawBaseUrl.endsWith("/api")
-    ? rawBaseUrl
-    : `${rawBaseUrl.replace(/\/$/, "")}/api`;
-
 async function fetchAI(type, payload) {
     try {
         const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-        const response = await fetch(`${baseUrl}/ai/chat`, {
+        const response = await fetch("/api/ai/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 ...(token ? { Authorization: `Bearer ${token}` } : {}),
             },
-            body: JSON.stringify({ type, payload })
+            body: JSON.stringify({ type, payload }),
         });
 
         if (!response.ok) {
@@ -23,10 +18,10 @@ async function fetchAI(type, payload) {
     } catch (error) {
         console.error("AI Fetch Error:", error);
         return {
-            text: "Связь с ассистентом временно нестабильна, но я скоро вернусь.",
+            text: "Connection to assistant is temporarily unstable, please try again soon.",
             emotion: "thinking",
             recommendations: [],
-            actions: []
+            actions: [],
         };
     }
 }

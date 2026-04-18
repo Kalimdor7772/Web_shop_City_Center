@@ -573,7 +573,12 @@ const getTokenUser = async (req) => {
 const tryOpenAIResponse = async ({ userMessage, cart, products, preferences, userContext }) => {
     if (!genAI) return null;
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const model = genAI.getGenerativeModel({ 
+        model: "gemini-2.5-flash",
+        generationConfig: {
+            responseMimeType: "text/plain",
+        }
+    });
 
     const userPrompt = JSON.stringify({
         userMessage,
@@ -663,9 +668,11 @@ export const chatWithAI = async (req, res) => {
             aiOutput = await tryOpenAIResponse({ userMessage, cart, products, preferences, userContext });
         } catch (error) {
             console.warn("Falling back to rule-based AI assistant:", error.message);
+            aiOutput = null;
         }
 
-        if (!aiOutput) {
+        if (!aiOutput || !aiOutput.reply || 
+            (typeof aiOutput.reply === 'string' && aiOutput.reply.includes('Cannot read'))) {
             aiOutput = buildRuleBasedResponse({ type, userMessage, cart, products, preferences, userContext });
         }
 

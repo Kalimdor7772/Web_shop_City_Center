@@ -151,7 +151,9 @@ export const CartProvider = ({ children }) => {
         void syncWithBackend();
     }, [cartItems, isAuthenticated, isInitialized, user?.id]);
 
-    const addToCart = (product) => {
+    const addToCart = (product, options = {}) => {
+        const { silentAI = false } = options;
+
         setCartItems((prevItems) => {
             const existingItem = prevItems.find((item) => item.id === product.id);
             let newItems;
@@ -174,6 +176,7 @@ export const CartProvider = ({ children }) => {
                             detail: {
                                 product,
                                 state: { totalItems: newTotalItems, totalPrice: newTotalPrice, items: newItems },
+                                silentAI,
                             },
                         })
                     );

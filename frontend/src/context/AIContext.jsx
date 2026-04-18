@@ -108,6 +108,7 @@ export const AIProvider = ({ children }) => {
     useEffect(() => {
         const handleProductAdded = async (event) => {
             const detail = event.detail;
+            if (detail?.silentAI) return;
             const product = detail.product || detail;
             const state = detail.state;
 
