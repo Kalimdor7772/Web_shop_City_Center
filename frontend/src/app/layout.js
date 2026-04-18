@@ -38,30 +38,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="ru" suppressHydrationWarning>
-            <body className={`${inter.variable} ${manrope.variable} antialiased`}>
-                <SiteChrome />
-                <AuthProvider>
-                    <CartProvider>
-                        <OrderProvider>
-                            <AIProvider>
-                                <WishlistProvider>
-                                    <ToastProvider>
-                                        <ThemeProvider>
-                                            <LanguageProvider>
-                                                <Navbar />
-                                                <main className="site-main min-h-screen pt-20">{children}</main>
-                                                <Footer />
-                                                <Toast />
-                                                <Assistant />
-                                            </LanguageProvider>
-                                        </ThemeProvider>
-                                    </ToastProvider>
-                                </WishlistProvider>
-                            </AIProvider>
-                        </OrderProvider>
-                    </CartProvider>
-                </AuthProvider>
+        <html lang="ru">
+            <body>
+                {children}
             </body>
         </html>
     );
