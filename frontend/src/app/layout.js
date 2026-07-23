@@ -41,27 +41,27 @@ export default function RootLayout({ children }) {
         <html lang="ru" suppressHydrationWarning>
             <body className={`${inter.variable} ${manrope.variable} antialiased`}>
                 <SiteChrome />
-                <AuthProvider>
-                    <CartProvider>
-                        <OrderProvider>
-                            <AIProvider>
-                                <WishlistProvider>
-                                    <ToastProvider>
-                                        <ThemeProvider>
-                                            <LanguageProvider>
+                <LanguageProvider>
+                    <AuthProvider>
+                        <CartProvider>
+                            <OrderProvider>
+                                <AIProvider>
+                                    <WishlistProvider>
+                                        <ToastProvider>
+                                            <ThemeProvider>
                                                 <Navbar />
                                                 <main className="site-main min-h-screen pt-20">{children}</main>
                                                 <Footer />
                                                 <Toast />
                                                 <Assistant />
-                                            </LanguageProvider>
-                                        </ThemeProvider>
-                                    </ToastProvider>
-                                </WishlistProvider>
-                            </AIProvider>
-                        </OrderProvider>
-                    </CartProvider>
-                </AuthProvider>
+                                            </ThemeProvider>
+                                        </ToastProvider>
+                                    </WishlistProvider>
+                                </AIProvider>
+                            </OrderProvider>
+                        </CartProvider>
+                    </AuthProvider>
+                </LanguageProvider>
             </body>
         </html>
     );

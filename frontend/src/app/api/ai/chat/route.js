@@ -34,11 +34,13 @@ export async function POST(request) {
 
         const body = await request.json();
         const authHeader = request.headers.get("authorization");
+        const cookieHeader = request.headers.get("cookie");
         const response = await fetch(`${apiBaseUrl}/ai/chat`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 ...(authHeader ? { Authorization: authHeader } : {}),
+                ...(cookieHeader ? { Cookie: cookieHeader } : {}),
             },
             body: JSON.stringify(body),
             cache: "no-store",

@@ -10,6 +10,7 @@ import { formatPrice } from "@/lib/utils";
 import { t } from "@/lib/i18n";
 import { Heart, ShoppingBag, Trash2, ShoppingCart, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import ProductImage from "@/components/ui/ProductImage";
 
 export default function WishlistPage() {
     const { wishlistItems, removeFromWishlist } = useWishlist();
@@ -57,7 +58,7 @@ export default function WishlistPage() {
                                 className="glass-panel-strong group overflow-hidden rounded-[2rem] shadow-lg transition-all"
                             >
                                 <div className="relative aspect-square bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(244,238,223,0.86))] p-6">
-                                    <img src={item.image} alt={item.name} className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105" />
+                                    <ProductImage src={item.image} alt={item.name} fallbackLabel={item.name} className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105" />
                                     <div className="absolute left-3 top-3">
                                         <span className="rounded-full border border-white/60 bg-white/85 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-stone-600">
                                             {item.weight}

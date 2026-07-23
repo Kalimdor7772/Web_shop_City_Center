@@ -2,12 +2,13 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { notifyCartCleared, notifyProductAdded, sendUserMessage } from "@/services/aiSeller.service";
+import { t } from "@/lib/i18n";
 import { useAuth } from "./AuthContext";
 import { useCart } from "./CartContext";
 
 const createInitialAssistantMessage = () => ({
     role: "assistant",
-    text: "Здравствуйте. Я ваш помощник по покупкам в City Center. Помогу подобрать продукты, собрать корзину и довести заказ до оформления.",
+    text: t.ai.assistant.welcome,
 });
 
 const AIContext = createContext({
@@ -150,11 +151,11 @@ export const AIProvider = ({ children }) => {
     useEffect(() => {
         const handleProductRemoved = (event) => {
             const product = event.detail;
-            const displayName = product?.name || "товар";
+            const displayName = product?.name || t.ai.assistant.fallbackProduct;
 
             if (isOpen) {
                 addAssistantMessage({
-                    text: `Убрали ${displayName}? Если хотите, я помогу найти похожую замену или вернуть что-то в корзину.`,
+                    text: t.ai.assistant.removed.replace("{name}", displayName),
                     newEmotion: "idle",
                 });
             }
@@ -216,7 +217,7 @@ export const AIProvider = ({ children }) => {
         } catch (error) {
             console.error(error);
             addAssistantMessage({
-                text: "Не удалось связаться с AI-сервером. Попробуйте еще раз через пару секунд.",
+                text: t.ai.assistant.connectionFailed,
                 newEmotion: "idle",
             });
         }

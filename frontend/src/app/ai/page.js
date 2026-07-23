@@ -3,11 +3,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Bot, Clock, MessageSquare, Sparkles, Target, TrendingDown } from "lucide-react";
-import { useAI } from "@/context/AIContext";
-import { t } from "@/lib/i18n";
 import Link from "next/link";
+import { useAI } from "@/context/AIContext";
+import { useTranslation } from "@/lib/i18n";
 
 export default function AIPage() {
+    const t = useTranslation();
     const { openAssistant } = useAI();
 
     const features = [
@@ -156,7 +157,7 @@ export default function AIPage() {
                             {t.ai_info.dialogs.title}
                         </h2>
                         <p className="mt-4 max-w-2xl text-lg font-medium text-stone-600">
-                            Несколько примеров того, как AI помогает прямо в процессе покупок.
+                            {t.ai_info.dialogs.description}
                         </p>
 
                         <div className="mt-10 space-y-8">
@@ -199,7 +200,7 @@ export default function AIPage() {
                                     <Bot size={28} />
                                 </div>
                                 <div className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-emerald-700">
-                                    Ready
+                                    {t.ai_info.card.ready}
                                 </div>
                             </div>
 

@@ -37,7 +37,7 @@ function PaymentCallbackHandler() {
             }
 
             if (resultStatus === "failed") {
-                showToast("Оплата была отменена или не прошла");
+                showToast("Демо-оплата отменена или не подтверждена");
                 router.replace("/checkout?error=payment_failed");
                 return;
             }
@@ -46,7 +46,7 @@ function PaymentCallbackHandler() {
                 const paymentCheck = await kaspiService.checkPaymentStatus(paymentId);
 
                 if (paymentCheck.status !== "SUCCESS") {
-                    showToast("Статус платежа не подтвержден");
+                    showToast("Статус демонстрационного платежа не подтвержден");
                     router.replace("/checkout?error=payment_verification_failed");
                     return;
                 }
@@ -93,11 +93,11 @@ function PaymentCallbackHandler() {
                 }
 
                 clearCart();
-                showToast("Оплата прошла успешно");
+                showToast("Демо-оплата прошла успешно, заказ создан");
                 router.replace(`/order-success?id=${encodeURIComponent(result.order.id)}`);
             } catch (error) {
                 console.error("Payment processing error:", error);
-                showToast("Ошибка обработки платежа");
+                showToast("Ошибка обработки демонстрационного платежа");
                 router.replace("/checkout?error=processing_error");
             }
         };

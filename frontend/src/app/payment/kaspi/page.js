@@ -2,7 +2,7 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { AlertTriangle, CheckCircle, QrCode, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, Clock3, QrCode, ShieldCheck, XCircle } from "lucide-react";
 import { kaspiService } from "../../../utils/kaspi.service";
 
 export default function KaspiPaymentPage() {
@@ -66,8 +66,8 @@ function KaspiPaymentContent() {
             <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
                 <div className="w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-lg">
                     <AlertTriangle size={48} className="mx-auto mb-4 text-red-500" />
-                    <h1 className="mb-2 text-xl font-bold text-gray-800">Ошибка платежа</h1>
-                    <p className="mb-6 text-gray-500">Неверные параметры транзакции.</p>
+                    <h1 className="mb-2 text-xl font-bold text-gray-800">Ошибка оплаты</h1>
+                    <p className="mb-6 text-gray-500">Неверные параметры демонстрационного платежа.</p>
                     <button
                         onClick={() => router.push("/checkout")}
                         className="w-full rounded-xl bg-gray-200 py-3 font-medium text-gray-800 transition-colors hover:bg-gray-300"
@@ -86,10 +86,18 @@ function KaspiPaymentContent() {
             </div>
 
             <div className="flex flex-1 flex-col items-center justify-center p-4">
+                <div className="mb-4 flex w-full max-w-sm items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-900">
+                    <ShieldCheck size={18} className="shrink-0" />
+                    <div>
+                        <p className="text-xs font-black uppercase tracking-[0.18em]">Demo mode</p>
+                        <p className="text-sm font-medium">Это учебная оплата для дипломной защиты. Деньги не списываются.</p>
+                    </div>
+                </div>
+
                 <div className="w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-xl">
                     <div className="border-b border-gray-100 p-6 text-center">
-                        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-2xl">
-                            🏪
+                        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-2xl font-black text-red-600">
+                            K
                         </div>
                         <h2 className="text-lg font-bold text-gray-800">City Center Market</h2>
                         <p className="text-sm text-gray-500">Заказ {ref}</p>
@@ -112,14 +120,17 @@ function KaspiPaymentContent() {
                                 <QrCode size={120} className="text-gray-800" />
                                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 opacity-0 transition-opacity group-hover:opacity-100">
                                     <span className="px-2 text-center text-xs text-gray-500">
-                                        Сканируйте QR в приложении Kaspi.kz
+                                        Отсканируйте QR в приложении Kaspi.kz или нажмите кнопку ниже для демо-оплаты
                                     </span>
                                 </div>
                             </div>
                         )}
 
                         <div className="text-center">
-                            <p className="text-sm font-medium text-gray-500">Время на оплату</p>
+                            <p className="flex items-center justify-center gap-2 text-sm font-medium text-gray-500">
+                                <Clock3 size={14} />
+                                Время на оплату
+                            </p>
                             <p className={`text-lg font-bold font-mono ${timeLeft < 60 ? "text-red-500" : "text-gray-800"}`}>
                                 {formatTime(timeLeft)}
                             </p>
@@ -130,15 +141,20 @@ function KaspiPaymentContent() {
                         <p className="mb-3 text-center text-[10px] font-bold uppercase tracking-wider text-yellow-700">
                             Режим эмуляции
                         </p>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="mb-3 rounded-xl bg-white/80 px-4 py-3 text-center text-sm text-yellow-900">
+                            Для защиты можно просто нажать успешную оплату и показать полный путь до созданного заказа.
+                        </div>
+                        <div className="grid grid-cols-1 gap-3">
                             <button
                                 onClick={() => handleSimulateAction("SUCCESS")}
                                 disabled={status !== "READY"}
                                 className="flex items-center justify-center gap-2 rounded-xl bg-green-500 py-3 text-sm font-bold text-white transition-colors hover:bg-green-600 disabled:opacity-50"
                             >
                                 <CheckCircle size={16} />
-                                Оплатить
+                                Подтвердить демо-оплату
                             </button>
+                        </div>
+                        <div className="mt-3 grid grid-cols-2 gap-3">
                             <button
                                 onClick={() => handleSimulateAction("FAILED")}
                                 disabled={status !== "READY"}
@@ -147,12 +163,18 @@ function KaspiPaymentContent() {
                                 <XCircle size={16} />
                                 Отменить
                             </button>
+                            <button
+                                onClick={() => router.push("/checkout")}
+                                className="rounded-xl bg-white py-3 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-100"
+                            >
+                                Назад
+                            </button>
                         </div>
                     </div>
                 </div>
 
                 <p className="mt-8 max-w-xs text-center text-xs text-gray-400">
-                    Это демонстрационная страница. Реальные деньги не списываются.
+                    Это демонстрационная страница. Она имитирует QR-оплату и переводит заказ в успешный статус без реального эквайринга.
                 </p>
             </div>
         </div>

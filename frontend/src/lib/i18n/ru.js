@@ -527,3 +527,54 @@
     }
 };
 
+ru.home.heroStats = {
+    freshPicks: "Свежие находки",
+    localFarms: "Локальные фермы",
+    fastDelivery: "Быстрая доставка"
+};
+
+ru.home.heroScene = {
+    seasonal: "Сезонное",
+    todayHarvest: "Урожай дня",
+    organicPicks: "Органические продукты для вашей корзины",
+    farmFresh: "С фермы",
+    sameDay: "В тот же день",
+    citrusGlow: "Цитрусовый заряд",
+    greenEnergy: "Зеленая энергия"
+};
+
+ru.ai.assistant = {
+    welcome: "Здравствуйте. Я ваш помощник по покупкам в City Center. Помогу подобрать продукты, собрать корзину и довести заказ до оформления.",
+    online: "онлайн",
+    headerTitle: "AI помощник",
+    recommendations: "рекомендации",
+    buy: "Купить",
+    cartCta: "В корзину",
+    inputPlaceholder: "Спросите про подборку, бюджет или конкретные товары...",
+    addSuccess: "Добавлено: {name}",
+    addFailed: "Не удалось добавить товар в корзину. Попробуйте другой вариант.",
+    listFailed: "Не удалось обработать список товаров для корзины.",
+    multiAddFailed: "Не удалось добавить товары в корзину. Попробуйте еще раз.",
+    addedMany: "Добавлено в корзину: {count} товар(а)",
+    removed: "Убрали {name}? Если хотите, я помогу найти похожую замену или вернуть что-то в корзину.",
+    fallbackProduct: "товар",
+    connectionFailed: "Не удалось связаться с AI-сервером. Попробуйте еще раз через пару секунд.",
+    quickActions: {
+        breakfastLabel: "Что на завтрак?",
+        breakfastPrompt: "Что взять на завтрак?",
+        days3Label: "На 3 дня",
+        days3Prompt: "Соберите корзину на 3 дня для 2 человек",
+        familyLabel: "Для семьи",
+        familyPrompt: "Соберите корзину на неделю для семьи",
+        budgetLabel: "Бюджет 20000 ₸",
+        budgetPrompt: "Соберите корзину на 20000 тенге",
+        healthyLabel: "Полезная корзина",
+        healthyPrompt: "Подберите полезные продукты",
+        kbjuLabel: "КБЖУ корзины",
+        kbjuPrompt: "Покажите КБЖУ корзины"
+    }
+};
+
+ru.ai_info.dialogs.description = "Несколько примеров того, как AI помогает прямо в процессе покупок.";
+ru.ai_info.card.ready = "Готов";
+

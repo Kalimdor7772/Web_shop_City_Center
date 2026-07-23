@@ -1,35 +1,17 @@
 import fetchAPI from './api';
 
-const getAuthToken = (response) => response?.data?.token || response?.token || null;
-
 export const login = async (email, password) => {
-  const response = await fetchAPI('/auth/login', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
-
-  const token = response?.data?.token;
-
-  if (token) {
-    localStorage.setItem("token", token);
-  }
-
-  return response;
+    return await fetchAPI('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+    });
 };
 
 export const register = async (userData) => {
-    const response = await fetchAPI('/auth/register', {
+    return await fetchAPI('/auth/register', {
         method: 'POST',
         body: JSON.stringify(userData),
     });
-
-    const token = response?.data?.token;
-
-    if (token) {
-        localStorage.setItem("token", token);
-    }
-
-    return response;
 };
 
 export const getMe = async () => {
@@ -43,8 +25,15 @@ export const updateProfile = async (profileData) => {
     });
 };
 
-export const logout = () => {
-    localStorage.removeItem('token');
+export const logout = async () => {
+    try {
+        await fetchAPI('/auth/logout', {
+            method: 'POST',
+        });
+    } catch {
+        // Continue local cleanup even if backend logout fails.
+    }
+
     localStorage.removeItem('pending_order');
     localStorage.removeItem('draft_order');
     localStorage.removeItem('wishlistItems');

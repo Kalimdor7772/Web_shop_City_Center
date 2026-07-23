@@ -1,10 +1,14 @@
 import jwt from "jsonwebtoken";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import OpenAI from "openai";
 import prisma from "../utils/prisma.js";
 
-const genAI = process.env.GEMINI_API_KEY
-    ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
+const openRouterClient = process.env.OPENROUTER_API_KEY
+    ? new OpenAI({
+        apiKey: process.env.OPENROUTER_API_KEY,
+        baseURL: "https://openrouter.ai/api/v1",
+    })
     : null;
+const OPENROUTER_MODEL = process.env.OPENROUTER_MODEL || "openai/gpt-4.1-mini";
 
 const FREE_DELIVERY_THRESHOLD = 15000;
 
@@ -293,6 +297,7 @@ const buildShoppingPlan = (products, message, userContext) => {
     }
 
     const recommended = uniqueProducts(selected, 8);
+    const checkoutSelection = selected.flatMap((item) => Array.from({ length: item.quantity }, () => item.id));
     const lines = selected
         .map((item) => `${item.name} x${item.quantity} - ${item.lineTotal} ₸`)
         .join("\n");
@@ -307,6 +312,8 @@ const buildShoppingPlan = (products, message, userContext) => {
         emotion: "advising",
         recommendedProductIds: recommended.map((product) => product.id),
         actions: [
+            { label: "Добавить набор в корзину", action: `add_multiple_to_cart:${checkoutSelection.join(",")}` },
+            { label: "Оформить этот набор", action: `prepare_checkout:${checkoutSelection.join(",")}` },
             { label: "Открыть каталог", action: "navigate:/catalog" },
             { label: "Открыть корзину", action: "navigate:/cart" },
             { label: "Перейти к оформлению", action: "navigate:/checkout" },
@@ -571,14 +578,7 @@ const getTokenUser = async (req) => {
 };
 
 const tryOpenAIResponse = async ({ userMessage, cart, products, preferences, userContext }) => {
-    if (!genAI) return null;
-
-    const model = genAI.getGenerativeModel({ 
-        model: "gemini-2.5-flash",
-        generationConfig: {
-            responseMimeType: "text/plain",
-        }
-    });
+    if (!openRouterClient) return null;
 
     const userPrompt = JSON.stringify({
         userMessage,
@@ -602,18 +602,24 @@ const tryOpenAIResponse = async ({ userMessage, cart, products, preferences, use
         })),
     });
 
-    const result = await model.generateContent([
-        { text: SALES_SYSTEM_PROMPT },
-        { text: userPrompt },
-    ]);
+    const completion = await openRouterClient.chat.completions.create({
+        model: OPENROUTER_MODEL,
+        temperature: 0.6,
+        messages: [
+            { role: "system", content: SALES_SYSTEM_PROMPT },
+            { role: "user", content: userPrompt },
+        ],
+    });
 
-    const responseText = result.response.text();
+    const responseText = completion.choices?.[0]?.message?.content?.trim() || "";
+    if (!responseText) return null;
+
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
     if (jsonMatch) {
         try {
             return JSON.parse(jsonMatch[0]);
         } catch (e) {
-            console.warn("Gemini JSON parse failed, falling back to raw text reply", e);
+            console.warn("OpenRouter JSON parse failed, falling back to raw text reply", e);
         }
     }
 

@@ -1,16 +1,28 @@
 import jwt from 'jsonwebtoken';
 import prisma from '../utils/prisma.js';
 
+const TOKEN_COOKIE_NAME = 'auth_token';
+
+const getCookieToken = (cookieHeader = '') => {
+    const cookies = cookieHeader.split(';').map((part) => part.trim());
+    const tokenCookie = cookies.find((part) => part.startsWith(`${TOKEN_COOKIE_NAME}=`));
+    return tokenCookie ? decodeURIComponent(tokenCookie.split('=').slice(1).join('=')) : null;
+};
+
 const protect = async (req, res, next) => {
-    let token;
+    let token =
+        getCookieToken(req.headers.cookie) ||
+        null;
 
     if (
         req.headers.authorization &&
         req.headers.authorization.startsWith('Bearer')
     ) {
-        try {
-            token = req.headers.authorization.split(' ')[1];
+        token = req.headers.authorization.split(' ')[1];
+    }
 
+    if (token) {
+        try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
             req.user = await prisma.user.findUnique({

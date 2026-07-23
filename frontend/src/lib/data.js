@@ -1,20 +1,8 @@
 
-// --- Configuration ---
-export const CATALOG_STRUCTURE = {
-    "Фрукты и овощи": ["Все", "Фрукты", "Овощи", "Зелень", "Ягоды", "Экзотика"],
-    "Мясо и рыба": ["Все", "Птица", "Говядина", "Свинина", "Рыба", "Морепродукты", "Полуфабрикаты"],
-    "Молочные продукты": ["Все", "Молоко", "Сыр", "Йогурт", "Кисломолочные", "Масло и сливки", "Яйца"],
-    "Хлеб и выпечка": ["Все", "Хлеб", "Сладкая выпечка", "Лаваш и лепешки", "Торты"],
-    "Напитки": ["Все", "Вода", "Соки", "Газировка", "Чай и кофе", "Энергетики"],
-    "Бакалея": ["Все", "Крупы", "Макароны", "Масло", "Консервы", "Специи", "Снеки"],
-    "Бытовая химия": ["Все", "Стирка", "Уборка", "Для посуды", "Освежители"],
-    "Личная гигиена": ["Все", "Уход за волосами", "Уход за телом", "Зубная паста", "Гигиена"]
-};
+import { CATALOG_STRUCTURE, catalogCategories } from "./catalog";
 
 // --- Categories for Home Page ---
-export const categories = Object.keys(CATALOG_STRUCTURE).map((name) => ({
-    name
-}));
+export const categories = catalogCategories.map(({ name }) => ({ name }));
 
 // --- Data Generation Helper ---
 // We use a seeded random generator (simple LCG) to ensure ids and prices are stable across reloads

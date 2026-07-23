@@ -10,6 +10,7 @@ import { useToast } from "../../context/ToastContext";
 import { t } from "@/lib/i18n";
 import { formatPrice } from "@/lib/utils";
 import { getProductWeightLabel } from "@/lib/product";
+import ProductImage from "@/components/ui/ProductImage";
 
 const ProductCard = ({ product, onClick, compact = false }) => {
     const { addToCart } = useCart();
@@ -46,11 +47,11 @@ const ProductCard = ({ product, onClick, compact = false }) => {
                     <div className="absolute inset-x-6 top-5 h-24 rounded-full bg-amber-200/20 blur-2xl" />
                     <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white/30 to-transparent" />
 
-                    <img
+                    <ProductImage
                         src={product.image}
                         alt={product.name}
                         className="block h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                        loading="lazy"
+                        fallbackLabel={product.name}
                     />
 
                     <div className="absolute left-3 top-3 z-20">

@@ -5,20 +5,30 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Apple, Beef, Carrot, Coffee, Croissant, Fish, IceCream, Milk } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
+import { HOME_CATEGORY_CONFIG } from "@/lib/catalog";
+
+const CATEGORY_ICONS = {
+    produce: Apple,
+    bakery: Croissant,
+    dairy: Milk,
+    meat: Beef,
+    seafood: Fish,
+    grocery: Carrot,
+    coffee: Coffee,
+    sweets: IceCream,
+};
 
 export default function CategoriesSection() {
     const t = useTranslation();
+    const categories = HOME_CATEGORY_CONFIG.map((item) => {
+        const Icon = CATEGORY_ICONS[item.translationKey];
 
-    const categories = [
-        { id: 1, name: t.home?.cat?.produce, icon: <Apple />, accent: "from-emerald-200/70 to-lime-100", textColor: "text-emerald-800", href: "/catalog?category=Овощи и фрукты" },
-        { id: 2, name: t.home?.cat?.bakery, icon: <Croissant />, accent: "from-amber-200/80 to-orange-100", textColor: "text-amber-800", href: "/catalog?category=Выпечка" },
-        { id: 3, name: t.home?.cat?.dairy, icon: <Milk />, accent: "from-sky-200/80 to-cyan-100", textColor: "text-sky-800", href: "/catalog?category=Молочные продукты" },
-        { id: 4, name: t.home?.cat?.meat, icon: <Beef />, accent: "from-rose-200/80 to-orange-100", textColor: "text-rose-800", href: "/catalog?category=Мясо и рыба" },
-        { id: 5, name: t.home?.cat?.seafood, icon: <Fish />, accent: "from-indigo-200/80 to-sky-100", textColor: "text-indigo-800", href: "/catalog?category=Мясо и рыба" },
-        { id: 6, name: t.home?.cat?.grocery, icon: <Carrot />, accent: "from-orange-200/80 to-yellow-100", textColor: "text-orange-800", href: "/catalog?category=Бакалея" },
-        { id: 7, name: t.home?.cat?.coffee, icon: <Coffee />, accent: "from-stone-200/80 to-amber-100", textColor: "text-stone-800", href: "/catalog?category=Напитки" },
-        { id: 8, name: t.home?.cat?.sweets, icon: <IceCream />, accent: "from-pink-200/80 to-rose-100", textColor: "text-pink-800", href: "/catalog?category=Кондитерские изделия" },
-    ];
+        return {
+            ...item,
+            name: t.home?.cat?.[item.translationKey],
+            icon: <Icon />,
+        };
+    });
 
     return (
         <section className="organic-section px-3 py-10 md:px-5">
@@ -30,7 +40,12 @@ export default function CategoriesSection() {
 
                 <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-6">
                     {categories.map((cat, index) => (
-                        <Link key={cat.id} href={cat.href} className="group">
+                        <Link
+                            key={cat.id}
+                            href={{ pathname: "/catalog", query: { category: cat.category, ...(cat.subcategory ? { subcategory: cat.subcategory } : {}) } }}
+                            className="group"
+                            aria-label={`${cat.name} - ${cat.subcategory || cat.category}`}
+                        >
                             <motion.div
                                 whileHover={{ y: -10, rotateX: 4, rotateY: -4 }}
                                 whileTap={{ scale: 0.97 }}

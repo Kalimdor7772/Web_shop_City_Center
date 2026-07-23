@@ -23,16 +23,10 @@ async function fetchAPI(endpoint, options = {}) {
         throw configError;
     }
 
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
     const headers = {
         "Content-Type": "application/json",
         ...options.headers,
     };
-
-    if (token) {
-        headers.Authorization = `Bearer ${token}`;
-    }
 
     let response;
 
@@ -40,6 +34,7 @@ async function fetchAPI(endpoint, options = {}) {
         response = await fetch(`${BASE_URL}${endpoint}`, {
             ...options,
             headers,
+            credentials: "include",
         });
     } catch (error) {
         const networkError = new Error("Cannot connect to API server. Check NEXT_PUBLIC_API_URL and backend availability.");
@@ -52,10 +47,6 @@ async function fetchAPI(endpoint, options = {}) {
     const data = isJson ? await response.json() : {};
 
     if (!response.ok) {
-        if (response.status === 401 && typeof window !== "undefined") {
-            localStorage.removeItem("token");
-        }
-
         const error = new Error(data.message || "API Error");
         error.status = response.status;
         throw error;

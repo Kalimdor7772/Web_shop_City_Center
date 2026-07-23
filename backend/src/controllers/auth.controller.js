@@ -2,9 +2,30 @@ import prisma from '../utils/prisma.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+const TOKEN_COOKIE_NAME = 'auth_token';
+
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d',
+        expiresIn: '12h',
+    });
+};
+
+const buildCookieOptions = () => ({
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+    maxAge: 12 * 60 * 60 * 1000,
+});
+
+const attachAuthCookie = (res, token) => {
+    res.cookie(TOKEN_COOKIE_NAME, token, buildCookieOptions());
+};
+
+const clearAuthCookie = (res) => {
+    res.clearCookie(TOKEN_COOKIE_NAME, {
+        ...buildCookieOptions(),
+        maxAge: undefined,
     });
 };
 
@@ -27,16 +48,24 @@ const normalizeUser = (user) => ({
 export const register = async (req, res, next) => {
     try {
         const { firstName, lastName, email, password, phone, avatar, profile } = req.body;
+        const normalizedEmail = String(email || '').trim().toLowerCase();
 
-      if (!email || !password) {
-  return res.status(400).json({
-    success: false,
-    message: "Please provide email and password"
-  });
-}
+        if (!normalizedEmail || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Please provide email and password"
+            });
+        }
+
+        if (String(password).length < 8) {
+            return res.status(400).json({
+                success: false,
+                message: "Password must be at least 8 characters long"
+            });
+        }
 
         const userExists = await prisma.user.findUnique({
-            where: { email }
+            where: { email: normalizedEmail }
         });
 
         if (userExists) {
@@ -52,7 +81,7 @@ export const register = async (req, res, next) => {
             data: {
                 firstName,
                 lastName,
-                email,
+                email: normalizedEmail,
                 password: hashedPassword,
                 phone: phone || null,
                 avatar: avatar || null,
@@ -60,11 +89,13 @@ export const register = async (req, res, next) => {
             },
         });
 
+        const token = generateToken(user.id);
+        attachAuthCookie(res, token);
+
         res.status(201).json({
             success: true,
             data: {
                 ...normalizeUser(user),
-                token: generateToken(user.id),
             },
         });
     } catch (error) {
@@ -78,23 +109,26 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
+        const normalizedEmail = String(email || '').trim().toLowerCase();
 
-        if (!email || !password) {
+        if (!normalizedEmail || !password) {
             const error = new Error('Пожалуйста, введите email и пароль');
             error.statusCode = 400;
             throw error;
         }
 
         const user = await prisma.user.findUnique({
-            where: { email }
+            where: { email: normalizedEmail }
         });
 
         if (user && (await bcrypt.compare(password, user.password))) {
+            const token = generateToken(user.id);
+            attachAuthCookie(res, token);
+
             res.status(200).json({
                 success: true,
                 data: {
                     ...normalizeUser(user),
-                    token: generateToken(user.id),
                 },
             });
         } else {
@@ -137,6 +171,7 @@ export const getMe = async (req, res, next) => {
 export const updateProfile = async (req, res, next) => {
     try {
         const { firstName, lastName, email, phone, avatar, profile } = req.body;
+        const normalizedEmail = email ? String(email).trim().toLowerCase() : undefined;
 
         const existingUser = await prisma.user.findUnique({
             where: { id: req.user.id },
@@ -157,7 +192,7 @@ export const updateProfile = async (req, res, next) => {
             data: {
                 firstName: firstName || undefined,
                 lastName: lastName || undefined,
-                email: email || undefined,
+                email: normalizedEmail || undefined,
                 phone: phone || undefined,
                 avatar: avatar || undefined,
                 profile: mergedProfile || undefined,
@@ -171,4 +206,12 @@ export const updateProfile = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};
+
+export const logout = async (_req, res) => {
+    clearAuthCookie(res);
+    res.status(200).json({
+        success: true,
+        message: 'Logged out',
+    });
 };

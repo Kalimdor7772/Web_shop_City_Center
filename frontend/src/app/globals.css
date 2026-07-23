@@ -81,6 +81,13 @@ a {
   input[type="submit"] {
     cursor: none;
   }
+
+  .assistant-shell,
+  .assistant-shell *,
+  .assistant-shell input,
+  .assistant-shell button {
+    cursor: auto !important;
+  }
 }
 
 .site-main {
@@ -300,6 +307,16 @@ a {
     linear-gradient(90deg, rgba(14, 29, 24, 0.96), rgba(10, 23, 20, 0.94)),
     rgba(10, 23, 20, 0.92) !important;
   border-color: rgba(104, 155, 133, 0.2) !important;
+}
+
+.assistant-shell input,
+.assistant-shell textarea {
+  caret-color: #111827;
+}
+
+:root[data-theme="dark"] .assistant-shell input,
+:root[data-theme="dark"] .assistant-shell textarea {
+  caret-color: #fbfdfa;
 }
 
 :root[data-theme="dark"] [class*="bg-[linear-gradient(135deg,rgba(255,252,245,0.96),rgba(250,244,231,0.86))]"] {

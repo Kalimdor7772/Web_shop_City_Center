@@ -6,13 +6,18 @@ import cors from "cors";
 import router from "./routes/index.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import prisma from "./utils/prisma.js";
+import { createCorsOptions, requireStrongJwtSecret, securityHeaders } from "./middlewares/security.middleware.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, "../.env"), override: true });
 
 const app = express();
-app.use(cors());
+requireStrongJwtSecret();
+
+app.disable("x-powered-by");
+app.use(securityHeaders);
+app.use(cors(createCorsOptions()));
 app.use(express.json());
 
 app.use("/api", router);

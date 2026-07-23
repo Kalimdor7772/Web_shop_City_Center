@@ -12,6 +12,8 @@ import { useToast } from "@/context/ToastContext";
 import { formatPrice } from "@/lib/utils";
 import { getProductWeightLabel } from "@/lib/product";
 
+const splitLines = (value) => String(value || "").split("\n").filter(Boolean);
+
 function SectionHeader({ title, icon: Icon, accent, iconClass = "text-gray-900" }) {
     return (
         <div className="mb-8 flex items-center gap-4">
@@ -95,6 +97,8 @@ function PromoCard({ product, onAddToCart }) {
 export default function DealsPage() {
     const { addToCart } = useCart();
     const { showToast } = useToast();
+    const bannerHotTitleLines = splitLines(t.deals?.bannerHotTitle);
+    const bundleTitleLines = splitLines(t.deals?.bundle?.title);
 
     const promoData = useMemo(() => {
         const hotDeals = products.slice(0, 4).map((product) => ({
@@ -185,10 +189,10 @@ export default function DealsPage() {
                                     {t.deals.bannerHotLabel}
                                 </span>
                                 <h3 className="mb-4 text-4xl font-black leading-tight tracking-[-0.04em] md:text-5xl">
-                                    {t.deals.bannerHotTitle.split("\n").map((line, index) => (
+                                    {bannerHotTitleLines.map((line, index) => (
                                         <React.Fragment key={index}>
                                             {line}
-                                            {index + 1 < t.deals.bannerHotTitle.split("\n").length && <br />}
+                                            {index + 1 < bannerHotTitleLines.length && <br />}
                                         </React.Fragment>
                                     ))}
                                 </h3>
@@ -216,10 +220,10 @@ export default function DealsPage() {
                     <div className="relative z-10 flex-1 text-center lg:text-left">
                         <span className="glass-panel mb-4 inline-block rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-violet-700">{t.deals.bundle.label}</span>
                         <h3 className="mb-6 text-4xl font-black leading-tight tracking-[-0.04em] text-gray-900 md:text-5xl">
-                            {t.deals.bundle.title.split("\n").map((line, index) => (
+                            {bundleTitleLines.map((line, index) => (
                                 <React.Fragment key={index}>
                                     {line}
-                                    {index + 1 < t.deals.bundle.title.split("\n").length && <br />}
+                                    {index + 1 < bundleTitleLines.length && <br />}
                                 </React.Fragment>
                             ))}
                         </h3>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { t } from "@/lib/i18n";
+import { useTranslation } from "@/lib/i18n";
 
 const products = [
     { key: "apple", emoji: "\uD83C\uDF4E", bg: "bg-red-100", color: "text-red-600" },
@@ -15,7 +15,6 @@ const createItem = (id) => {
     const product = products[Math.floor(Math.random() * products.length)];
     return {
         id,
-        name: product.name,
         emoji: product.emoji,
         bg: product.bg,
         color: product.color,
@@ -26,7 +25,9 @@ const createItem = (id) => {
 };
 
 export default function ProductGame() {
+    const t = useTranslation();
     const boardRef = useRef(null);
+    const nextItemIdRef = useRef(0);
     const [items, setItems] = useState([]);
     const [score, setScore] = useState(0);
     const [basketX, setBasketX] = useState(50);
@@ -35,7 +36,7 @@ export default function ProductGame() {
     useEffect(() => {
         if (!isPlaying) return undefined;
         const spawn = setInterval(() => {
-            setItems((prev) => [...prev, createItem(Date.now())].slice(-10));
+            setItems((prev) => [...prev, createItem(nextItemIdRef.current++)].slice(-10));
         }, 1400);
 
         return () => clearInterval(spawn);

@@ -38,21 +38,15 @@ export const AuthProvider = ({ children }) => {
     // Load user from backend on mount if token exists
     useEffect(() => {
         const checkAuth = async () => {
-            const token = localStorage.getItem("token");
-            if (token) {
-                try {
-                    const response = await authService.getMe();
-                    if (response.success) {
-                        setUser(response.data);
-                        setIsAuthenticated(true);
-                    } else {
-                        localStorage.removeItem("token");
-                    }
-                } catch (error) {
-                    if (error?.status !== 401) {
-                        console.error("Failed to fetch user:", error);
-                    }
-                    localStorage.removeItem("token");
+            try {
+                const response = await authService.getMe();
+                if (response.success) {
+                    setUser(response.data);
+                    setIsAuthenticated(true);
+                }
+            } catch (error) {
+                if (error?.status !== 401 && error?.status !== 0) {
+                    console.error("Failed to fetch user:", error);
                 }
             }
             setIsInitialized(true);
@@ -101,13 +95,11 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const verifySMS = (code) => {
-        if (code !== "123456") {
-            return { success: false, error: "Неверный код подтверждения" };
-        }
-
-        setUser((prev) => ({ ...prev, isVerified: true }));
-        return { success: true };
+    const verifySMS = () => {
+        return {
+            success: false,
+            error: "SMS verification is temporarily disabled until a secure server-side OTP flow is implemented."
+        };
     };
 
     const completeOnboarding = async (profileData) => {

@@ -3,16 +3,17 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Leaf, ShoppingBag, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { t } from "@/lib/i18n";
+import { useTranslation } from "@/lib/i18n";
 import HeroScene from "./HeroScene";
 
-const highlights = [
-    { label: "Fresh Picks", value: "120+" },
-    { label: "Local Farms", value: "18" },
-    { label: "Fast Delivery", value: "15 min" },
-];
-
 const HeroSection = () => {
+    const t = useTranslation();
+    const highlights = [
+        { label: t.home.heroStats.freshPicks, value: "120+" },
+        { label: t.home.heroStats.localFarms, value: "18" },
+        { label: t.home.heroStats.fastDelivery, value: "15 min" },
+    ];
+
     return (
         <section className="organic-section relative w-full overflow-hidden px-3 py-10 md:px-5 md:py-14">
             <div className="section-shell relative mx-auto grid min-h-[680px] max-w-7xl grid-cols-1 gap-12 overflow-hidden rounded-[3rem] px-6 py-8 md:grid-cols-[1.08fr_0.92fr] md:px-10 md:py-12">
@@ -71,18 +72,18 @@ const HeroSection = () => {
                             <HeroScene />
                             <div className="absolute inset-x-6 top-6 flex items-center justify-between">
                                 <div className="glass-panel rounded-full px-4 py-2 text-xs font-bold uppercase tracking-[0.26em] text-emerald-800">
-                                    Seasonal
+                                    {t.home.heroScene.seasonal}
                                 </div>
                                 <div className="glass-panel flex h-11 w-11 items-center justify-center rounded-full text-amber-500">
                                     <Sparkles className="h-5 w-5" />
                                 </div>
                             </div>
                             <div className="absolute bottom-6 left-6 right-6 rounded-[2rem] bg-white/68 p-5 shadow-[0_20px_50px_rgba(122,92,47,0.18)] backdrop-blur-xl">
-                                <p className="text-xs font-bold uppercase tracking-[0.24em] text-stone-500">Today&apos;s harvest</p>
-                                <p className="mt-2 text-2xl font-black text-gray-900">Organic picks for your basket</p>
+                                <p className="text-xs font-bold uppercase tracking-[0.24em] text-stone-500">{t.home.heroScene.todayHarvest}</p>
+                                <p className="mt-2 text-2xl font-black text-gray-900">{t.home.heroScene.organicPicks}</p>
                                 <div className="mt-4 flex items-center gap-3">
-                                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">Farm fresh</span>
-                                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">Same day</span>
+                                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">{t.home.heroScene.farmFresh}</span>
+                                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">{t.home.heroScene.sameDay}</span>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +94,7 @@ const HeroSection = () => {
                             className="glass-panel-strong absolute right-0 top-10 rounded-[2rem] px-5 py-4"
                         >
                             <div className="text-4xl">{"\uD83C\uDF4A"}</div>
-                            <p className="mt-2 text-sm font-bold text-gray-900">Citrus glow</p>
+                            <p className="mt-2 text-sm font-bold text-gray-900">{t.home.heroScene.citrusGlow}</p>
                         </motion.div>
 
                         <motion.div
@@ -102,7 +103,7 @@ const HeroSection = () => {
                             className="glass-panel-strong absolute bottom-8 left-0 rounded-[2rem] px-5 py-4"
                         >
                             <div className="text-4xl">{"\uD83E\uDD6C"}</div>
-                            <p className="mt-2 text-sm font-bold text-gray-900">Green energy</p>
+                            <p className="mt-2 text-sm font-bold text-gray-900">{t.home.heroScene.greenEnergy}</p>
                         </motion.div>
                     </div>
                 </motion.div>

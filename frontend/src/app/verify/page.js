@@ -137,8 +137,8 @@ export default function VerifyPage() {
                     </div>
                     <h1 className="text-3xl font-heading font-black text-gray-900 mb-2">Verification</h1>
                     <p className="text-gray-500 font-medium">
-                        We sent a code to your phone. <br />
-                        Enter the 6-digit code below.
+                        SMS verification is temporarily unavailable. <br />
+                        Please continue without this page until secure OTP is connected.
                     </p>
                 </div>
 
@@ -181,10 +181,10 @@ export default function VerifyPage() {
                     <div className="space-y-4">
                         <button
                             type="submit"
-                            disabled={isLoading || isSuccess || code.some(c => !c)}
+                            disabled
                             className="w-full py-5 bg-gray-900 text-white rounded-2xl font-black text-lg hover:bg-black disabled:bg-gray-100 disabled:text-gray-400 transition-all shadow-xl active:scale-[0.98]"
                         >
-                            {isLoading ? "Verifying..." : "Confirm Code"}
+                            Secure OTP Coming Soon
                         </button>
 
                         <div className="text-center">

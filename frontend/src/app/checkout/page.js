@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, CheckCircle2, ChevronRight, CreditCard, MapPin, MessageSquare, Phone, ShoppingBag, Truck } from "lucide-react";
+import { AlertCircle, ArrowLeft, CheckCircle2, ChevronRight, CreditCard, MapPin, MessageSquare, Phone, ShoppingBag, Truck } from "lucide-react";
 import { t } from "@/lib/i18n";
 import { useCart } from "../../context/CartContext";
 import { useOrder } from "../../context/OrderContext";
@@ -266,8 +266,8 @@ export default function CheckoutPage() {
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-6">
-                                        <Field label={t.checkout.entrance} value={formData.entrance} onChange={(value) => setFormData({ ...formData, entrance: value })} placeholder="—" />
-                                        <Field label={t.checkout.floor} value={formData.floor} onChange={(value) => setFormData({ ...formData, floor: value })} placeholder="—" />
+                                        <Field label={t.checkout.entrance} value={formData.entrance} onChange={(value) => setFormData({ ...formData, entrance: value })} placeholder="-" />
+                                        <Field label={t.checkout.floor} value={formData.floor} onChange={(value) => setFormData({ ...formData, floor: value })} placeholder="-" />
                                     </div>
 
                                     <div className="space-y-2">
@@ -319,7 +319,7 @@ export default function CheckoutPage() {
                                             <span className="text-2xl font-black">K</span>
                                         </div>
                                         <p className="text-xl font-black">Kaspi.kz</p>
-                                        <p className={`mt-1 text-xs font-bold ${formData.paymentMethod === "kaspi" ? "text-white/65" : "text-stone-400"}`}>{t.checkout.fastQr}</p>
+                                        <p className={`mt-1 text-xs font-bold ${formData.paymentMethod === "kaspi" ? "text-white/65" : "text-stone-400"}`}>QR-оплата в демо-режиме</p>
                                     </button>
 
                                     <button
@@ -336,6 +336,16 @@ export default function CheckoutPage() {
                                         <p className="text-xl font-black">{t.checkout.cash}</p>
                                         <p className={`mt-1 text-xs font-bold ${formData.paymentMethod === "cash" ? "text-white/65" : "text-stone-400"}`}>{t.checkout.payCourier}</p>
                                     </button>
+                                </div>
+
+                                <div className="mt-6 flex items-start gap-3 rounded-[2rem] border border-amber-200 bg-amber-50 p-5 text-amber-900">
+                                    <AlertCircle size={20} className="mt-0.5 shrink-0" />
+                                    <div>
+                                        <p className="text-sm font-black uppercase tracking-[0.16em]">Демо-оплата для защиты</p>
+                                        <p className="mt-1 text-sm font-medium text-amber-800">
+                                            При выборе Kaspi откроется демонстрационная страница оплаты. Реальные деньги не списываются, но заказ оформляется полностью.
+                                        </p>
+                                    </div>
                                 </div>
                             </section>
                         </div>

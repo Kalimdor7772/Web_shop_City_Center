@@ -7,12 +7,18 @@ import { BarChart3, Bot, CalendarRange, Coffee, Heart, Send, ShoppingBag, Sparkl
 import { useAI } from "@/context/AIContext";
 import { useCart } from "@/context/CartContext";
 import { useToast } from "@/context/ToastContext";
-import { getProductById } from "@/services/product.service";
+import ProductImage from "@/components/ui/ProductImage";
+import { useTranslation } from "@/lib/i18n";
 import { formatPrice } from "@/lib/utils";
+import { getProductById } from "@/services/product.service";
+
+const interpolate = (template, values) =>
+    template.replace(/\{(\w+)\}/g, (_, key) => String(values[key] ?? ""));
 
 export default function Assistant() {
+    const t = useTranslation();
     const { isOpen, openAssistant, closeAssistant, messages, sendMessage, recommendations, emotion, isThinking } = useAI();
-    const { addToCart } = useCart();
+    const { addToCart, totalItems } = useCart();
     const { showToast } = useToast();
     const [inputValue, setInputValue] = useState("");
     const [mounted, setMounted] = useState(false);
@@ -26,9 +32,38 @@ export default function Assistant() {
         if (isOpen) messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [isOpen, isThinking, messages, recommendations]);
 
+    const findLatestCheckoutAction = () => {
+        for (let index = messages.length - 1; index >= 0; index -= 1) {
+            const message = messages[index];
+            const action = message?.actions?.find((item) => item?.action?.startsWith("prepare_checkout:"));
+            if (action) return action.action;
+        }
+        return null;
+    };
+
+    const checkoutIntentTerms = ["\u043e\u0444\u043e\u0440\u043c", "\u0437\u0430\u043a\u0430\u0437", "checkout", "\u043e\u043f\u043b\u0430\u0442"];
+
+    const hasCheckoutIntent = (value = "") => {
+        const normalized = value.toLowerCase();
+        return checkoutIntentTerms.some((term) => normalized.includes(term));
+    };
+
+    const isCheckoutIntent = (value = "") => {
+        const normalized = value.toLowerCase();
+        return ["оформ", "заказ", "checkout", "оплат"].some((term) => normalized.includes(term));
+    };
+
     const handleSubmit = (event) => {
         event?.preventDefault();
         if (!inputValue.trim() || isThinking) return;
+
+        const latestCheckoutAction = findLatestCheckoutAction();
+        if (latestCheckoutAction && totalItems === 0 && hasCheckoutIntent(inputValue)) {
+            void handleAction(latestCheckoutAction);
+            setInputValue("");
+            return;
+        }
+
         sendMessage(inputValue);
         setInputValue("");
     };
@@ -41,7 +76,10 @@ export default function Assistant() {
 
     const handleAddToCart = (product) => {
         addToCart(product);
-        showToast(`Добавлено: ${product.name}`, { label: "В корзину", href: "/cart" });
+        showToast(interpolate(t.ai.assistant.addSuccess, { name: product.name }), {
+            label: t.ai.assistant.cartCta,
+            href: "/cart"
+        });
     };
 
     const handleAction = async (actionValue) => {
@@ -68,11 +106,14 @@ export default function Assistant() {
 
             if (product) {
                 addToCart(product);
-                showToast(`Добавлено: ${product.name}`, { label: "В корзину", href: "/cart" });
+                showToast(interpolate(t.ai.assistant.addSuccess, { name: product.name }), {
+                    label: t.ai.assistant.cartCta,
+                    href: "/cart"
+                });
                 return;
             }
 
-            showToast("Не удалось добавить товар в корзину. Попробуйте другой вариант.");
+            showToast(t.ai.assistant.addFailed);
             return;
         }
 
@@ -81,7 +122,7 @@ export default function Assistant() {
             const productIds = rawIds.split(",").map((id) => id.trim()).filter(Boolean);
 
             if (productIds.length === 0) {
-                showToast("Не удалось обработать список товаров для корзины.");
+                showToast(t.ai.assistant.listFailed);
                 return;
             }
 
@@ -110,7 +151,7 @@ export default function Assistant() {
 
             const validProducts = products.filter(Boolean);
             if (validProducts.length === 0) {
-                showToast("Не удалось добавить товары в корзину. Попробуйте еще раз.");
+                showToast(t.ai.assistant.multiAddFailed);
                 return;
             }
 
@@ -121,7 +162,18 @@ export default function Assistant() {
             });
 
             const totalAdded = validProducts.reduce((sum, item) => sum + item.quantity, 0);
-            showToast(`Добавлено в корзину: ${totalAdded} товар(а)`, { label: "В корзину", href: "/cart" });
+            showToast(interpolate(t.ai.assistant.addedMany, { count: totalAdded }), {
+                label: t.ai.assistant.cartCta,
+                href: "/cart"
+            });
+            return;
+        }
+
+        if (actionValue.startsWith("prepare_checkout:")) {
+            const rawIds = actionValue.split(":")[1] || "";
+            await handleAction(`add_multiple_to_cart:${rawIds}`);
+            window.location.assign("/checkout");
+            closeAssistant();
             return;
         }
 
@@ -148,12 +200,12 @@ export default function Assistant() {
     };
 
     const quickActions = [
-        { label: "Что на завтрак?", prompt: "Что взять на завтрак?", icon: Coffee },
-        { label: "На 3 дня", prompt: "Соберите корзину на 3 дня для 2 человек", icon: CalendarRange },
-        { label: "Для семьи", prompt: "Соберите корзину на неделю для семьи", icon: Users },
-        { label: "Бюджет 20000 ₸", prompt: "Соберите корзину на 20000 тенге", icon: Wallet },
-        { label: "Полезная корзина", prompt: "Подберите полезные продукты", icon: Heart },
-        { label: "КБЖУ корзины", prompt: "Покажите КБЖУ корзины", icon: BarChart3 }
+        { label: t.ai.assistant.quickActions.breakfastLabel, prompt: t.ai.assistant.quickActions.breakfastPrompt, icon: Coffee },
+        { label: t.ai.assistant.quickActions.days3Label, prompt: t.ai.assistant.quickActions.days3Prompt, icon: CalendarRange },
+        { label: t.ai.assistant.quickActions.familyLabel, prompt: t.ai.assistant.quickActions.familyPrompt, icon: Users },
+        { label: t.ai.assistant.quickActions.budgetLabel, prompt: t.ai.assistant.quickActions.budgetPrompt, icon: Wallet },
+        { label: t.ai.assistant.quickActions.healthyLabel, prompt: t.ai.assistant.quickActions.healthyPrompt, icon: Heart },
+        { label: t.ai.assistant.quickActions.kbjuLabel, prompt: t.ai.assistant.quickActions.kbjuPrompt, icon: BarChart3 }
     ];
 
     if (!mounted) return null;
@@ -180,10 +232,10 @@ export default function Assistant() {
                                     <span className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-white bg-green-500" />
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-black leading-tight tracking-tight text-gray-900 sm:text-base">AI помощник</h3>
+                                    <h3 className="text-sm font-black leading-tight tracking-tight text-gray-900 sm:text-base">{t.ai.assistant.headerTitle}</h3>
                                     <div className="flex items-center gap-1.5">
                                         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
-                                        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-stone-400">онлайн</p>
+                                        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-stone-400">{t.ai.assistant.online}</p>
                                     </div>
                                 </div>
                             </div>
@@ -238,12 +290,12 @@ export default function Assistant() {
 
                             {recommendations.length > 0 && !isThinking && (
                                 <div className="space-y-3 pt-2">
-                                    <p className="px-1 text-[10px] font-black uppercase tracking-[0.22em] text-stone-400">рекомендации</p>
+                                    <p className="px-1 text-[10px] font-black uppercase tracking-[0.22em] text-stone-400">{t.ai.assistant.recommendations}</p>
                                     <div className="no-scrollbar -mx-2 flex gap-3 overflow-x-auto px-2 pb-4">
                                         {recommendations.map((product) => (
                                             <motion.div key={product.id} whileHover={{ y: -5 }} className="glass-panel-strong group flex min-w-[148px] flex-col gap-3 rounded-[1.6rem] p-3 sm:min-w-[168px] sm:rounded-[2rem]">
                                                 <div className="relative aspect-square overflow-hidden rounded-[1.5rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(244,238,223,0.86))] p-3">
-                                                    <img src={product.image} alt="" className="h-full w-full object-contain transition-transform group-hover:scale-110" />
+                                                    <ProductImage src={product.image} alt={product.name} fallbackLabel={product.name} className="h-full w-full object-contain transition-transform group-hover:scale-110" />
                                                 </div>
                                                 <div className="px-1">
                                                     <h4 className="line-clamp-1 text-[11px] font-black text-gray-900">{product.name}</h4>
@@ -254,7 +306,7 @@ export default function Assistant() {
                                                     className="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 py-2 text-[10px] font-black text-white transition-all hover:bg-emerald-700"
                                                 >
                                                     <ShoppingBag size={12} />
-                                                    Купить
+                                                    {t.ai.assistant.buy}
                                                 </button>
                                             </motion.div>
                                         ))}
@@ -284,7 +336,7 @@ export default function Assistant() {
                                     type="text"
                                     value={inputValue}
                                     onChange={(event) => setInputValue(event.target.value)}
-                                    placeholder="Спросите про подборку, бюджет или конкретные товары..."
+                                    placeholder={t.ai.assistant.inputPlaceholder}
                                     className="min-w-0 flex-1 rounded-[1.1rem] bg-white/80 px-4 py-3 text-sm font-bold text-gray-900 outline-none transition-all placeholder:text-stone-400 focus:ring-2 focus:ring-emerald-500/20 sm:rounded-[1.5rem] sm:px-6 sm:py-4"
                                     disabled={isThinking}
                                 />

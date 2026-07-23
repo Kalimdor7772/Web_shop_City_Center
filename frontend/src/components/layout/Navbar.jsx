@@ -28,6 +28,7 @@ const Navbar = () => {
     const { totalItems } = useCart();
     const { wishlistItems } = useWishlist();
     const { user, isAuthenticated, logout, isInitialized } = useAuth(); // Added isInitialized
+    const isAdmin = user?.role === "ADMIN";
     const handleSearchClick = () => {
         if (pathname === "/catalog") {
             window.dispatchEvent(new Event("catalog:focus-search"));
@@ -47,6 +48,11 @@ const Navbar = () => {
                     <Link href="/catalog" className="rounded-full px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-white/80 hover:text-emerald-700">{t.nav.catalog}</Link>
                     <Link href="/deals" className="rounded-full px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-white/80 hover:text-emerald-700">{t.nav.deals}</Link>
                     <Link href="/ai" className="rounded-full bg-[linear-gradient(135deg,rgba(31,157,104,0.16),rgba(247,183,51,0.2))] px-4 py-2 text-sm font-bold text-emerald-800 hover:shadow-[0_10px_24px_rgba(31,157,104,0.16)]">{t.nav.ai}</Link>
+                    {isAuthenticated && isAdmin && (
+                        <Link href="/admin" className="rounded-full px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-white/80 hover:text-emerald-700">
+                            {t.nav.admin || "Admin"}
+                        </Link>
+                    )}
                 </div>
 
                 <div className="hidden items-center gap-4 md:flex">
@@ -134,6 +140,15 @@ const Navbar = () => {
                                         >
                                             {t.orders.title || 'Orders'}
                                         </Link>
+                                        {isAdmin && (
+                                            <Link
+                                                href="/admin"
+                                                onClick={() => setIsProfileOpen(false)}
+                                                className="block px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-white/80 hover:text-gray-900"
+                                            >
+                                                {t.nav.admin || "Admin"}
+                                            </Link>
+                                        )}
                                         <div className="my-1 h-px bg-amber-100/80"></div>
                                         <button
                                             onClick={() => {
@@ -191,6 +206,11 @@ const Navbar = () => {
                             <Link href="/catalog" onClick={() => setIsOpen(false)} className="border-b border-amber-100/80 py-2 text-lg font-medium text-gray-800">{t.nav.catalog}</Link>
                             <Link href="/deals" onClick={() => setIsOpen(false)} className="border-b border-amber-100/80 py-2 text-lg font-medium text-emerald-700">{t.nav.deals}</Link>
                             <Link href="/ai" onClick={() => setIsOpen(false)} className="border-b border-amber-100/80 py-2 text-lg font-medium text-gray-800">{t.nav.ai}</Link>
+                            {isAuthenticated && isAdmin && (
+                                <Link href="/admin" onClick={() => setIsOpen(false)} className="border-b border-amber-100/80 py-2 text-lg font-medium text-gray-800">
+                                    {t.nav.admin || "Admin"}
+                                </Link>
+                            )}
                             <div className="flex gap-4 mt-2">
                                 <Link href="/cart" onClick={() => setIsOpen(false)} className="flex-1 rounded-2xl bg-emerald-700 py-3 text-center font-bold text-white shadow-[0_12px_24px_rgba(31,157,104,0.24)]">
                                     {t.nav.cart} ({totalItems})

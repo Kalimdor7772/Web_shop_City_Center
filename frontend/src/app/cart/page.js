@@ -9,6 +9,7 @@ import { formatPrice } from "@/lib/utils";
 import { getProductWeightLabel } from "@/lib/product";
 import { useCart } from "@/context/CartContext";
 import { t } from "@/lib/i18n";
+import ProductImage from "@/components/ui/ProductImage";
 
 export default function CartPage() {
     const router = useRouter();
@@ -79,7 +80,7 @@ export default function CartPage() {
                             {cartItems.map((item) => (
                                 <div key={item.id} className="glass-panel-strong group flex items-center gap-4 rounded-[2rem] p-4 transition-all hover:shadow-lg md:gap-8 md:p-6">
                                     <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[1.5rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(244,238,223,0.86))] p-2 md:h-28 md:w-28">
-                                        <img src={item.image} alt={item.name} className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105" />
+                                        <ProductImage src={item.image} alt={item.name} fallbackLabel={item.name} className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105" />
                                     </div>
 
                                     <div className="min-w-0 flex-grow">

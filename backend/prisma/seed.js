@@ -683,8 +683,20 @@ async function upsertProduct(product, categoryId, manufacturerId) {
 
 async function seedUsers() {
     const salt = await bcrypt.genSalt(10);
-    const adminPass = await bcrypt.hash("admin123", salt);
-    const userPass = await bcrypt.hash("user123", salt);
+    const adminSeedPassword = process.env.SEED_ADMIN_PASSWORD;
+    const userSeedPassword = process.env.SEED_USER_PASSWORD;
+
+    if (!adminSeedPassword || !userSeedPassword) {
+        console.warn("Skipping seedUsers because SEED_ADMIN_PASSWORD or SEED_USER_PASSWORD is not set.");
+        return;
+    }
+
+    if (adminSeedPassword.length < 12 || userSeedPassword.length < 12) {
+        throw new Error("Seed user passwords must be at least 12 characters long.");
+    }
+
+    const adminPass = await bcrypt.hash(adminSeedPassword, salt);
+    const userPass = await bcrypt.hash(userSeedPassword, salt);
 
     await prisma.user.upsert({
         where: { email: "admin@citycenter.com" },
@@ -718,23 +730,10 @@ async function main() {
     for (const category of categoriesData) {
         const savedCategory = await upsertCategory({
             name: category.name,
-            image: category.image,
-            parentId: null // Сначала без parentId
+            image: category.image
         });
         categoryMap[category.name] = savedCategory.id;
         console.log(`- Category: ${category.name}`);
-    }
-
-    // Обновить parentId для подкатегорий
-    for (const category of categoriesData) {
-        if (category.parentName) {
-            const parentId = categoryMap[category.parentName];
-            await prisma.category.update({
-                where: { id: categoryMap[category.name] },
-                data: { parentId }
-            });
-            console.log(`- Updated parent for ${category.name}`);
-        }
     }
 
     console.log("Seeding manufacturers...");
@@ -746,8 +745,13 @@ async function main() {
         console.log(`- Manufacturer: ${manufacturer.name}`);
     }
 
-    console.log("Seeding products...");
-    for (const product of productsData) {
+    const seedFractionRaw = Number(process.env.SEED_PRODUCTS_FRACTION || "1");
+    const seedFraction = Number.isFinite(seedFractionRaw) ? Math.min(Math.max(seedFractionRaw, 0), 1) : 1;
+    const limit = Math.max(1, Math.floor(productsData.length * seedFraction));
+    const productsToSeed = productsData.slice(0, limit);
+
+    console.log(`Seeding products (${productsToSeed.length}/${productsData.length})...`);
+    for (const product of productsToSeed) {
         const categoryId = categoryMap[product.categoryName];
         const manufacturerId = manufacturerMap[product.manufacturerName];
 
@@ -760,7 +764,7 @@ async function main() {
         console.log(`- Product: ${product.name}`);
     }
 
-    const seededProductNames = productsData.map((product) => product.name);
+    const seededProductNames = productsToSeed.map((product) => product.name);
     const cleanupResult = await prisma.product.deleteMany({
         where: {
             name: { notIn: seededProductNames },

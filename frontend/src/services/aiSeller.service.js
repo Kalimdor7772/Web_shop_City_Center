@@ -1,13 +1,12 @@
 async function fetchAI(type, payload) {
     try {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
         const response = await fetch("/api/ai/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                ...(token ? { Authorization: `Bearer ${token}` } : {}),
             },
             body: JSON.stringify({ type, payload }),
+            credentials: "include",
         });
 
         if (!response.ok) {

@@ -8,6 +8,7 @@ import { Calendar, Package } from "lucide-react";
 import { useOrder } from "../../context/OrderContext";
 import { useAuth } from "../../context/AuthContext";
 import { t } from "@/lib/i18n";
+import ProductImage from "@/components/ui/ProductImage";
 
 export default function OrdersPage() {
     const router = useRouter();
@@ -91,7 +92,7 @@ export default function OrdersPage() {
                                 <div className="flex items-center gap-4 overflow-x-auto pb-2">
                                     {order.items.slice(0, 5).map((item, index) => (
                                         <div key={`${item.id || item.name}-${index}`} className="relative h-16 w-16 shrink-0 rounded-lg bg-white p-1">
-                                            <img src={item.image} alt={item.name} className="h-full w-full object-contain" />
+                                            <ProductImage src={item.image} alt={item.name} fallbackLabel={item.name} className="h-full w-full object-contain" />
                                             <span className="absolute -bottom-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full border border-gray-600 bg-gray-800 text-[10px] text-white">
                                                 {item.quantity}
                                             </span>

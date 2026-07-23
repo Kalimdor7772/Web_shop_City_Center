@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, Fragment, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, Fragment, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { setLocale as updateLocale, supportedLocales } from "@/lib/i18n";
 
 const LanguageContext = createContext({
@@ -9,9 +9,7 @@ const LanguageContext = createContext({
     supportedLocales: ["kk", "ru", "en"],
 });
 
-const getInitialLocale = () => {
-    if (typeof window === "undefined") return "ru";
-
+const getPreferredLocale = () => {
     const stored = localStorage.getItem("locale");
     if (stored && supportedLocales.includes(stored)) {
         return stored;
@@ -22,18 +20,43 @@ const getInitialLocale = () => {
 };
 
 export const LanguageProvider = ({ children }) => {
-    const [locale, setLocaleState] = useState(getInitialLocale);
+    const [locale, setLocaleState] = useState("ru");
+
+    const setLocale = useCallback((nextLocale) => {
+        const resolvedLocale =
+            typeof nextLocale === "function" ? nextLocale(locale) : nextLocale;
+        const safeLocale = supportedLocales.includes(resolvedLocale) ? resolvedLocale : "ru";
+
+        if (safeLocale === locale) {
+            return;
+        }
+
+        updateLocale(safeLocale);
+
+        if (typeof window !== "undefined") {
+            localStorage.setItem("locale", safeLocale);
+        }
+
+        setLocaleState(safeLocale);
+    }, [locale]);
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            localStorage.setItem("locale", locale);
+        const preferredLocale = getPreferredLocale();
+
+        if (preferredLocale !== locale) {
+            updateLocale(preferredLocale);
+            setLocaleState(preferredLocale);
+            return;
         }
-        updateLocale(locale);
+
+        updateLocale(locale, { notify: false });
+
+        localStorage.setItem("locale", locale);
     }, [locale]);
 
     const value = useMemo(
-        () => ({ locale, setLocale: setLocaleState, supportedLocales }),
-        [locale]
+        () => ({ locale, setLocale, supportedLocales }),
+        [locale, setLocale]
     );
 
     return (
